@@ -1,0 +1,47 @@
+.ck-content h2{
+    @apply text-3xl font-semibold text-gray-800;
+}
+
+.ck-content h3{
+    @apply text-2xl font-semibold text-gray-700;
+}
+
+.ck-content h4{
+    @apply text-xl font-semibold text-gray-600;
+}
+
+.ck-content p{
+    @apply text-base text-gray-600;
+}
+
+.ck-content a{
+    @apply underline decoration-1 cursor-pointer hover:text-blue-500 hover:no-underline font-semibold;
+}
+
+.ck-content ul{
+    @apply list-disc mt-1 ml-10;
+}
+
+.ck-content ol{
+    @apply list-decimal mt-1 ml-10;
+}
+
+.ck-content blockquote{
+    @apply text-gray-500 font-semibold;
+}
+
+.ck-content table{
+    @apply items-center bg-transparent w-full border-collapse ;
+}
+
+.ck-content figure{
+    @apply w-9/12 mb-3 pb-2;
+}
+/*
+.ck-content figure{
+    @apply w-9/12 mx-auto h-80 mb-3;
+} */
+
+/* .ck-content oembed{
+    @apply w-full h-full;
+} */

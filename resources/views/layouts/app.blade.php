@@ -7,21 +7,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
-    <!-- Styles -->
-    @livewireStyles
-
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    @include('layouts.app.styles')
 </head>
 
-<body class="font-sans antialiased">
+<body class="body-mdl font-sans antialiased min-h-screen max-h-full bg-gray-100">
     <x-jet-banner />
-
-    <div class="min-h-screen bg-gray-100">
+    <div class="overflow-hidden hidden"></div>
+    <div class="flex flex-col min-h-screen">
         @livewire('navigation-menu')
 
         <!-- Page Heading -->
@@ -34,14 +26,14 @@
         @endif
 
         <!-- Page Content -->
-        <main>
+        <main class="flex-initial">
             {{ $slot }}
         </main>
     </div>
 
     @stack('modals')
 
-    @livewireScripts
+    @include('layouts.app.scripts')
 </body>
 
 </html>

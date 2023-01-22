@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Publish\Post;
+use App\Models\Publish\PosTag;
+use App\Observers\PostObserver;
+use App\Observers\PostTagObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // PosTag::observe(PostTagObserver::class);
+        // Post::observe(PostObserver::class);
     }
 }
