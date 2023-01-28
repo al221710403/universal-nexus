@@ -1,6 +1,6 @@
 <x-modal wire:model="my_posts" maxWidth="full">
     <x-slot name="title">
-        <span class="mr-2"><i class='bx bxs-notepad'></i></span> Mis post
+        <span class="mr-2"><i class='bx bxs-notepad'></i></span> Mis artículos
     </x-slot>
 
     <x-slot name="content">
@@ -75,7 +75,7 @@
                 </div>
                 <input type="text" wire:model="searchMyPost"
                     class="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-gray-500 focus:border-gray-500"
-                    placeholder="Buscar post">
+                    placeholder="Buscar artículo">
             </div>
         </div>
 
@@ -122,7 +122,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex justify-end gap-4">
-                                <button onclick="Confirm('el post','deleteMyPost',{{$post->id}})"
+                                <button onclick="Confirm('el artícluo','deleteMyPost',{{$post->id}})"
                                     class="text-2xl hover:text-red-500" title="Eliminar">
                                     <i class='bx bxs-trash'></i>
                                 </button>
@@ -134,7 +134,15 @@
                         </td>
                     </tr>
                     @empty
-                    No ahi ningun post aun
+                    <tr>
+                        <td colspan="5">
+                            <p class="text-center text-sm mb-3 py-3">No ahí artículos, agregue uno nuevo con
+                                el botón
+                                <span><i class='bx bxs-add-to-queue'></i></span> que se euncuentra en la parte superior
+                                de la pantalla principal.
+                            </p>
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>

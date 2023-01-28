@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\Publish\Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +18,23 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->call(function () {
+        //     $files = Storage::files('publish/post/image');
+        //     $images = Image::pluck('image_url')->toArray();
+        //     Storage::delete(array_diff($files, $images));
+        // })->dailyAt('1:17');
+
+        // $schedule->call(function () {
+        //     $files = Storage::files('publish/post/image');
+        //     $images = Image::pluck('image_url')->toArray();
+        //     Storage::delete(array_diff($files, $images));
+        // })->twiceDaily(9, 13);
+
+        $schedule->call(function () {
+            $files = Storage::files('publish/post/image');
+            $images = Image::pluck('image_url')->toArray();
+            Storage::delete(array_diff($files, $images));
+        })->twiceDaily(17, 21);
     }
 
     /**
@@ -25,7 +44,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

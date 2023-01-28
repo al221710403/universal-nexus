@@ -20,7 +20,7 @@ class CreatePostsTable extends Migration
             // $table->text('excerpt');
             $table->text('body')->nullable();
             $table->boolean('published')->default(false);
-            $table->boolean('public')->default(false);
+            $table->boolean('public')->default(true);
             $table->dateTime('publish_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             // $table->dateTime('publish_date')->nullable();
             $table->string('featured_image')->nullable();

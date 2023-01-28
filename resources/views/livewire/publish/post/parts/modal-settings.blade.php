@@ -37,6 +37,12 @@
                         de publicación</label>
                     @error('publish_date') <span class="text-red-500 text-sm">{{ $message}}</span>@enderror
                 </div>
+                <div class="relative z-0 mb-6 w-full group flex items-center justify-center">
+                    <input id="post_public" type="checkbox" wire:model="post_public"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                    <label for="post_public" class="ml-2 text-sm font-medium text-gray-900 ">Artícluo
+                        público</label>
+                </div>
             </div>
 
             <div class="mb-6 w-full" wire:ignore>

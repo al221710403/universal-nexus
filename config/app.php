@@ -13,6 +13,10 @@ return [
     |
     */
 
+    'theme' => env('THEME', 'Laravel'),
+
+    'bd_name' => env('DB_DATABASE', 'local'),
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
@@ -67,7 +71,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Mexico_City',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +84,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------

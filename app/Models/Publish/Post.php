@@ -36,6 +36,7 @@ class Post extends Model
     protected $casts = [
         'meta' => 'array',
         'published' => 'boolean',
+        'public' => 'boolean',
         'markdown' => 'boolean',
     ];
 
@@ -47,6 +48,11 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'posts_tags', 'post_id', 'tag_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 
     public function tagsFilter()
@@ -78,24 +84,6 @@ class Post extends Model
         }
     }
 
-    //     /**
-    //  * Get the renderable post content.
-    //  *
-    //  * @return HtmlString|string
-    //  */
-    // public function getContentAttribute()
-    // {
-    //     if (! $this->markdown) {
-    //         return $this->body;
-    //     }
-
-    //     $converter = new GithubFlavoredMarkdownConverter([
-    //         'allow_unsafe_links' => false,
-    //     ]);
-
-    //     return new HtmlString($converter->convertToHtml($this->body));
-    // }
-
 
     /**
      * Scope a query to only include published posts.
@@ -106,6 +94,17 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('published', true);
+    }
+
+    /**
+     * Scope a query to only include public posts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
     }
 
     /**

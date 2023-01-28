@@ -1,27 +1,30 @@
 @push('scripts')
-{{-- <style>
-    .ck-editor__main h2 {
-        color: red;
-        font-size: 2rem;
+<style>
+    .ck-content p>span {
+        display: inline-block !important;
+        float: left !important;
+        padding-right: 0.75rem !important;
+        max-width: 100% !important;
+        min-width: 50% !important;
     }
 
-    .ck-editor__main p {
-        color: blue;
+    .ck-content p>span>img {
+        height: 18rem !important;
+        width: 100% !important;
     }
-</style> --}}
+</style>
 <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-
 @endpush
 
 
-<div>
-
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4" x-data="{ open: false }">
+<div class="container mx-auto py-4 mb-4">
+    <div class="mb-2" x-data="{ open: false }">
         <section class="flex justify-between p-4 bg-white rounded-lg shadow-lg">
             <h2 class="text-xl font-bold text-gray-700"> <span><i class='bx bxs-label'></i></span> {{$labelAction}}
                 <span class="ml-4 text-gray-500 text-base">Draft</span>
             </h2>
             <ul class="flex text-xl text-gray-700">
+                @if (!$published)
                 <li class="mr-3">
                     <button wire:click="$set('published_modal', true)"
                         class="btn-mdl text-xs rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-2 py-1"
@@ -29,18 +32,19 @@
                         Publicar
                     </button>
                 </li>
+                @endif
 
                 <li class="mr-3">
                     <button wire:click="save" class="hover:text-indigo-700" title="Guardar">
                         <i class='bx bxs-save'></i>
                     </button>
                 </li>
-                <li class="mr-3">
+                {{-- <li class="mr-3">
                     <button wire:click="$set('preview_modal', true)" class="btn-mdl hover:text-indigo-700"
                         title="Vista previa" data-action="open">
                         <i class='bx bxs-low-vision'></i>
                     </button>
-                </li>
+                </li> --}}
 
                 <li class="mr-3">
                     <a href="{{ route('publish.posts.index') }}" class=" hover:text-indigo-700" title="Regresar">
@@ -60,13 +64,6 @@
                         <i class='bx bxs-cog'></i>
                     </button>
                 </li>
-
-                {{-- <li>
-                    <button class="hover:text-indigo-700" title="Información">
-                        <i class='bx bxs-info-circle'></i>
-                    </button>
-                </li> --}}
-
             </ul>
         </section>
 
@@ -76,8 +73,10 @@
 
     </div>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
-        <div class="p-4 bg-white rounded-lg shadow-lg relative">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-2 bg-white rounded-md shadow-lg p-3 relative">
+
             <p class="bg-white shadow-lg absolute rounded-full text-2xl text-blue-600 px-2 py-1 -top-2 -right-2">
                 <span>
                     <i class='bx bxs-pencil bx-tada'></i>
@@ -90,28 +89,72 @@
                     <x-jet-input-error for="title" />
                 </div>
 
-                <div class="mt-4" wire:ignore wire:key="CKEditorBody">
-                    <textarea id="editor" class="w-full h-96">{!! $body !!}</textarea>
-                    <x-jet-input-error for="body" />
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <div class="text-indigo-500 hidden">
+                <div class="mt-4" wire:ignore wire:key="CKEditorBody">
+                    <div id="editor">
+                        {!! $body !!}
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {{-- Artículos similares --}}
+        <aside>
+            <h2 class="text-xl font-bold text-gray-600 mb-4">
+                Post similares
+            </h2>
+
+            <ul>
+                @forelse ($similares as $item)
+                <li class="mb-4 h-32 overflow-hidden bg-white shadow-lg">
+                    <a href="{{ route('publish.posts.show', $item->slug) }}" class="flex" title="{{$item->title}}">
+                        <img class="w-36 h-32 object-cover object-center" src="{{Storage::url($item->featured_image)}}"
+                            alt="portada: {{$item->title}}">
+                        <div class="flex-1 ml-2 flex flex-col overflow-hidden py-1">
+                            <h3 class="block mb-1 text-gray-700 font-semibold text-base truncate">
+                                {{$item->title}}
+                            </h3>
+                            <p class="text-clip max-w-full max-h-32 text-sm flex-1 flex-wrap">
+                                {{$item->featured_image_caption}}
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                @empty
+                <li>
+                    No ahí artículos similares
+                </li>
+                @endforelse
+            </ul>
+        </aside>
+
     </div>
 </div>
 
 
 
 @push('scripts')
-<script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script src="{{ asset('vendor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+<script src="{{ asset('vendor/prism/prism.js') }}"></script>
 <script src="https://unpkg.com/@yaireo/tagify"></script>
 <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 
+
 <script>
     ClassicEditor
-        .create( document.querySelector( '#editor' ) )
+        .create( document.querySelector( '#editor' ),{
+            mediaEmbed: {
+                previewsInData:true
+            },
+            simpleUpload: {
+                // The URL that the images are uploaded to.
+                uploadUrl: "{{ route('publish.posts.image.uplodad') }}",
+            },
+            placeholder: 'My custom placeholder for the body'
+        } )
         .then( function(editor){
             editor.model.document.on( 'change:data', () => {
                 @this.set('body',editor.getData());

@@ -5,22 +5,15 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-jet-application-mark class="block h-9 w-auto" />
+                    <a href="{{ route('publish.posts.index') }}">
+                        <img class="block h-9 w-auto text-black" src="{{ asset('./img/logo.svg') }}" alt="Milton">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('publish.posts.index') }}"
-                        :active="request()->routeIs('publish.posts.index')">
+                    <x-jet-nav-link href="{{ route('publish.posts.index') }}" :active="Request::is('publish/*')">
                         {{ __('Blog') }}
-                    </x-jet-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('publish.posts.store') }}"
-                        :active="request()->routeIs('publish.posts.store')">
-                        {{ __('New Blog') }}
                     </x-jet-nav-link>
                 </div>
             </div>

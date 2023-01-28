@@ -15,6 +15,23 @@ class PosShowController extends Component
     }
     public function render()
     {
-        return view('livewire.publish.pos-show-controller');
+        $tags = $this->post->tags;
+
+        if ($tags->count() > 0) {
+            $similares = Post::where('id', '!=', $this->post->id)
+                ->tagsf($tags->pluck('id')->toArray())
+                ->published()
+                ->latest('id')
+                ->take(6)
+                ->get();
+        } else {
+            $similares = Post::where('id', '!=', $this->post->id)
+                ->live()
+                ->latest('id')
+                ->take(6)
+                ->get();
+        }
+
+        return view('livewire.publish.post.show', compact('similares'));
     }
 }

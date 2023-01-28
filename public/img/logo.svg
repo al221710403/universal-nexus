@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="94.71326px" height="132.5px" viewBox="0 0 94.71326 132.5" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="18.083374" y1="-1.9019408" x2="1.7573268" y2="10.242655" id="gradient_1">
+      <stop offset="0%" stop-color="#000000" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_1">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feOffset dx="0" dy="2" />
+      <feGaussianBlur stdDeviation="2" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0.49803922 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect0_dropShadow" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect0_dropShadow" result="shape" />
+    </filter>
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_2">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feOffset dx="0" dy="2" />
+      <feGaussianBlur stdDeviation="2" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0.6392157 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect0_dropShadow" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect0_dropShadow" result="shape" />
+    </filter>
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_3">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feOffset dx="0" dy="2" />
+      <feGaussianBlur stdDeviation="2" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 1 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect0_dropShadow" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect0_dropShadow" result="shape" />
+    </filter>
+  </defs>
+  <g id="Logo" transform="translate(0.5 4)">
+    <path d="M47 23L55.4853 31.4853L47 39.9706L38.5147 31.4853L47 23Z" id="Rectangle-4-Copy-2" fill="url(#gradient_1)" fill-rule="evenodd" stroke="none" />
+    <path d="M85.163 19.4497L67.4853 1.902L59.0001 10.3873L85.163 36.5502L85.163 19.4497Z" id="Rectangle-6-Copy-4" fill="#000000" fill-rule="evenodd" stroke="none" />
+    <path d="M66.4999 0L27 7.27417e-11L36 9L41 9L47.8 2L54.5 9L58 9L66.4999 0Z" id="Rectangle-6-Copy-5" fill="#000000" fill-rule="evenodd" stroke="none" filter="url(#filter_1)" />
+    <path d="M8.48524 17.799L24.7487 1.25127L33.234 9.73655L8.48529 34.4853L8.48524 17.799Z" id="Rectangle-6-Copy-6" fill="#000000" fill-rule="evenodd" stroke="none" />
+    <path d="M21.3086 43.7044L73.3533 75.8572L73.3068 87.8235L21.2351 56.0982L21.3086 43.7044Z" id="Rectangle-6-Copy-7" fill="#000000" fill-rule="evenodd" stroke="none" />
+    <path d="M85 42L47.3341 4L9 42L21 42L47.2286 16L73 42L85 42Z" id="Triangle-Copy-2-Xor" fill="#000000" fill-rule="evenodd" stroke="none" filter="url(#filter_1)" />
+    <path d="M85 90L47.3341 128L9 90L21 90L47.2286 116L73 90L85 90Z" id="Triangle-Copy-2-Xor-2" fill="#000000" fill-rule="evenodd" stroke="none" />
+    <path d="M21 44L9 44L9 88L21 88L21 44ZM73 44L73 88L85 88L85 44L73 44Z" id="Rectangle-8-Copy-Xor" fill="#000000" fill-rule="evenodd" stroke="none" filter="url(#filter_2)" />
+    <g filter="url(#filter_3)">
+      <g id="Group-Copy-2" transform="translate(36 42)">
+        <path d="M5.50006 3.7383L11.5001 0L17.5001 3.7383L17.5001 59.8128L5.50006 59.8128L5.50006 3.7383Z" id="Rectangle-3" fill="#000000" fill-rule="evenodd" stroke="#000000" stroke-width="1" />
+        <path d="M11.4999 69.9991L-5.72205e-06 57.5999C-5.72205e-06 57.5999 7.57141 60.6684 14 59.8544C20.4286 59.0403 29.5 51.9639 29.5 51.9639L11.4999 69.9991Z" id="Triangle-2" fill="#000000" fill-rule="evenodd" stroke="#000000" stroke-width="1" />
+      </g>
+    </g>
+  </g>
+</svg>
