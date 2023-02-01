@@ -12,26 +12,27 @@ class TestController extends Controller
     {
         // $value = env('DB_DATABASE');
 
-        config(['app.bd_name' => 'prueba']);
-        $valueDB = config('app.bd_name');
+        // config(['app.bd_name' => 'prueba']);
+        // $valueDB = config('app.bd_name');
 
-        $tag = Tag::create([
-            'name' => 'prueba_tag'
-        ]);
-        // $value = config('DB.DATABASE');
-        // config(['app.timezone' => 'America/Chicago']);
-        dd($tag, $valueDB);
-        $padre = dirname(__DIR__);
-        $padre = dirname($padre);
-        $padre = dirname($padre);
-        $name = $padre . '\.env';
+        // $tag = Tag::create([
+        //     'name' => 'prueba_tag'
+        // ]);
+        // // $value = config('DB.DATABASE');
+        // // config(['app.timezone' => 'America/Chicago']);
+        // dd($tag, $valueDB);
+        // $padre = dirname(__DIR__);
+        // $padre = dirname($padre);
+        // $padre = dirname($padre);
+        // $name = $padre . '\.env';
 
-        $fp = fopen($name, 'r') or die("error al intentar crear archivo");
-        // $file = fopen($padre . '\file.txt', 'a+') or die("error al intentar crear archivo");
-        $datos = fread($fp, filesize($name));
-        fclose($fp);
+        // $fp = fopen($name, 'r') or die("error al intentar crear archivo");
+        // // $file = fopen($padre . '\file.txt', 'a+') or die("error al intentar crear archivo");
+        // $datos = fread($fp, filesize($name));
+        // fclose($fp);
 
-        return view('test', compact('datos'));
+        // return view('test', compact('datos'));
+        return view('test2');
         // dd($datos);
         // $sizeFile = fpassthru($fp);
 

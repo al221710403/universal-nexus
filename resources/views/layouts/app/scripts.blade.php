@@ -3,6 +3,8 @@
 <script src="{{ asset('plugins/jquery-3.1.1.min.js') }}"></script>
 <script src="{{ asset('plugins/sweetalerts/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('plugins/notification/snackbar/snackbar.min.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 
 <script>
     function noty(msg, option = 1){
@@ -83,7 +85,6 @@
             boton.addEventListener("click", cuandoSeHaceClick);
         });
 </script>
-
 
 @stack('scripts')
 @livewireScripts

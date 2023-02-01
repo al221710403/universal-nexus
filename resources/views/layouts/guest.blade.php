@@ -7,18 +7,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-white-background.svg')}}" />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/boxicons.min.css') }}">
 </head>
 
 <body>
     <div class="font-sans text-gray-900 antialiased">
         {{ $slot }}
     </div>
+    <script src="{{ asset('js/boxicons.js') }}"></script>
 </body>
 
 </html>
