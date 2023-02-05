@@ -1,4 +1,4 @@
-@push('scripts')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
 <style>
     :root {
@@ -88,6 +88,12 @@
 
         --tw-text-opacity: 1;
         color: rgb(82 82 82 / var(--tw-text-opacity));
+    }
+
+    code {
+        background-color: hsla(0, 0%, 78%, .3) !important;
+        border-radius: 2px !important;
+        padding: 0.15em !important;
     }
 
     .ck-content blockquote {

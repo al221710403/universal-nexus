@@ -6,6 +6,7 @@
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 
+{{-- Función y eventos para generar y recibir alertas de notify --}}
 <script>
     function noty(msg, option = 1){
         Snackbar.show({
@@ -17,9 +18,7 @@
             pos: 'top-right'
         });
     }
-</script>
 
-<script>
     document.addEventListener('DOMContentLoaded', function(){
         window.livewire.on('noty-success', msg=>{
             noty(msg);
@@ -37,8 +36,11 @@
             noty(msg,4);
         });
     });
+
 </script>
 
+
+{{-- Funcion para confirmar eliminar un modelo --}}
 <script>
     function Confirm(msg,emit,id){
         id = id || 0;
@@ -86,5 +88,60 @@
         });
 </script>
 
-@stack('scripts')
+
 @livewireScripts
+@stack('scripts')
+
+{{-- Metodos y funciones de boxicons --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        Livewire.on('copyToIcon', function () {
+            let iconElement = document.getElementsByClassName('icon_selected');
+            const clipboard = document.createElement("textarea");
+
+            // PASO 2
+            clipboard.value = iconElement[0].innerHTML.trim();
+            clipboard.setAttribute("readonly", "");
+            // PASO 3
+            clipboard.style.position = "absolute";
+            clipboard.style.left = "-9999px";
+            document.body.appendChild(clipboard);
+            // PASO 4
+            clipboard.select();
+
+            document.execCommand("copy");
+            // PASO 6
+            document.body.removeChild(clipboard);
+            //alert('copiado');
+            console.log('copiado al portapapeles')
+            window.livewire.emit('noty-success','Icono copiado')
+        });
+
+        Livewire.on('updateIconContainer', function () {
+            updateIconShow();
+        });
+
+        Livewire.on('readyToSend', function () {
+            let iconElement = document.getElementsByClassName('icon_selected');
+            let getIconClean = iconElement[0].innerHTML.trim();
+            window.livewire.emit('sendIconComponent',getIconClean);
+            console.log(getIconClean);
+        });
+    });
+
+
+    function updateIconShow(){
+        let iconElement = document.getElementsByClassName('icon_selected');
+        let iconContainer = document.getElementById('show_icon_i');
+
+        while(iconContainer.hasChildNodes()){
+            iconContainer.removeChild(iconContainer.firstChild);
+        }
+
+        const iconShow = document.createElement('code');
+        iconShow.textContent = iconElement[0].innerHTML;
+
+        iconContainer.appendChild(iconShow);
+        //console.log(iconContainer);
+    }
+</script>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ImageController;
 use App\Http\Livewire\Publish\PostController;
+use App\Http\Livewire\ToDo\TaskIndexController;
 use App\Http\Livewire\Publish\PosShowController;
 use App\Http\Livewire\Publish\PostIndexController;
 
@@ -40,5 +41,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/posts/edit/{id}', PostController::class)->name('publish.posts.edit');
         Route::get('/posts/show/{post}', PosShowController::class)->name('publish.posts.show');
         Route::post('image/upload', [ImageController::class, 'upload'])->name('publish.posts.image.uplodad');
+    });
+
+    // To Do List...
+    Route::prefix('/to-do')->group(function () {
+        Route::get('/task', TaskIndexController::class)->name('toDo.task.index');
     });
 });

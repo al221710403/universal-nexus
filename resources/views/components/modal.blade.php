@@ -1,10 +1,11 @@
-@props(['id', 'maxWidth','label','close'])
+@props(['id', 'maxWidth','label','close','index'])
 
 @php
 $id = $id ?? md5($attributes->wire('model'));
 $label = $label ?? false;
 $close = $close ?? false;
 $full = $maxWidth != 'full_screen' ? 'px-4 py-10' : '';
+$index = $index ?? 20;
 
 $maxWidth = [
 'max' => 'w-max', //Width se ajusta al maximo del contenido
@@ -17,9 +18,11 @@ $maxWidth = [
 ][$maxWidth ?? 'md'];
 @endphp
 
+
 <div x-cloak x-data="{ show: @entangle($attributes->wire('model')).defer }">
-    <div x-show="show" class="inset-0 z-50 h-full w-full fixed overflow-x-hidden overflow-y-auto"
-        style="background-color: rgba(0, 0, 0, 0.5)" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div x-show="show" class="inset-0 h-full w-full fixed overflow-x-hidden overflow-y-auto"
+        style="z-index: {{$index}}; background-color: rgba(0, 0, 0, 0.5)" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <div class="flex items-start justify-center {{$full}} text-center md:items-center sm:block min-h-screen">
             <div x-cloak x-show="show" x-transition:enter="transition ease-out duration-300 transform"
                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"

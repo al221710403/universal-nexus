@@ -16,6 +16,12 @@
         outline: none;
         box-shadow: none;
     }
+
+    .required::after {
+        content: " *";
+        --tw-text-opacity: 1;
+        color: rgb(239 68 68 / var(--tw-text-opacity));
+    }
 </style>
 
 <link rel="stylesheet" href="{{ mix('css/app.css') }}">

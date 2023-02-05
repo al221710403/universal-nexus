@@ -1,4 +1,4 @@
-@push('scripts')
+@push('styles')
 <style>
     .ck-content p>span {
         display: inline-block !important;

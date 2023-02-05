@@ -1,4 +1,4 @@
-@push('scripts')
+@push('styles')
 @endpush
 
 <div class="container mx-auto mt-2 pb-4">
