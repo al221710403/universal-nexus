@@ -6,6 +6,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Livewire\Publish\PostController;
 use App\Http\Livewire\ToDo\TaskIndexController;
 use App\Http\Livewire\Publish\PosShowController;
+use App\Http\Controllers\PredefinedFileController;
 use App\Http\Livewire\Publish\PostIndexController;
 
 /*
@@ -47,4 +48,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::prefix('/to-do')->group(function () {
         Route::get('/task', TaskIndexController::class)->name('toDo.task.index');
     });
+
+    //Predefined Files
+    Route::get('/archivos-pre', [PredefinedFileController::class, 'create'])->name('predefined.create');
+    Route::post('/archivos-pre/store', [PredefinedFileController::class, 'store'])->name('predefined.store');
 });

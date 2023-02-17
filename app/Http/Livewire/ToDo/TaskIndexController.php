@@ -2,27 +2,51 @@
 
 namespace App\Http\Livewire\ToDo;
 
-use App\Models\ToDo\Board;
-use App\Models\ToDo\Task;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\ToDo\Task;
+use App\Traits\FileTrait;
+use App\Models\ToDo\Board;
+use App\Models\PredefinedFile;
+use Illuminate\Support\Facades\Auth;
 
 class TaskIndexController extends Component
 {
-    public $myBoards, $myDay, $importantTasks, $retardedTasks, $pendingTasks, $completeTasks;
+    use FileTrait;
+    // Variables del utilizadas en el menu
+    public $myBoards, // Todos los tableros
+        $myDay, // Tablero de mi dia
+        $importantTasks,
+        $retardedTasks,
+        $pendingTasks,
+        $completeTasks;
 
-    public $boardId;
+    // $boardId change for boardSelected
+    public $boardSelected;
 
     // Modales
-    public $crateBoard = false, $modalBoxicon = false;
+    public $crateBoard = false, // Modal para crear una nueva lista
+        $modalBoxicon = false, // modal del boxicon
+        $modalNoteTask = false;
 
-    // Variables de new board
-    public $nameBoard, $iconBoard, $commentBoard;
+    // Variables utilizadas para la nueva lista
+    public $nameBoard,
+        $iconBoard,
+        $commentBoard;
+
+    // Variables para editar nota de tarea
+    public $taskEdit;
+    // , $newComment;
 
     protected $listeners = [
-        '$refresh', 'receiveIconToBoxicon'
+        '$refresh',
+        'receiveIconToBoxicon', //Recibe el icono del modal Boxicon
+        'changeSelect',
+        'editNote',
+        'saveNoteTask'
     ];
 
+    // Quita los espacios iniciales y finales del input
+    // del icono
     public function updatedIconBoard()
     {
         $this->iconBoard = trim($this->iconBoard);
@@ -30,32 +54,43 @@ class TaskIndexController extends Component
 
     public function mount()
     {
-        $MyBoard = Board::task()->first();
-        $this->boardId = $MyBoard->id;
+        $MyBoard = Board::select('id')->task()->first();
+        $this->boardSelected = $MyBoard->id; //Selecciona el tablero de tareas
     }
 
     public function render()
     {
-        $this->myBoards = Board::withCount('tasks')
+        // $task = Task::find(27);
+        // dd($task->files);
+        // Coleccion de tables
+        $this->myBoards = Board::select('id', 'name', 'icono')
+            ->orderBy('name')
+            ->withCount('tasks')
             ->author()
-            ->get();
+            ->get()
+            ->toArray();
 
+        // Contador del tablero de mi dia
         $this->myDay = Task::author()
             ->today()
             ->count();
 
+        // Contador tareas importantes
         $this->importantTasks = Task::author()
             ->important()
             ->count();
 
+        // Contador de tareas retrasadas
         $this->retardedTasks = Task::author()
             ->retarded()
             ->count();
 
+        // Contador de tareas pendientes
         $this->pendingTasks = Task::author()
             ->pending()
             ->count();
 
+        // Contador de tareas completadas
         $this->completeTasks = Task::author()
             ->complete()
             ->count();
@@ -63,19 +98,29 @@ class TaskIndexController extends Component
         return view('livewire.toDo.index');
     }
 
-
+    /**
+     * title: Cambio de tablero
+     * Descripción: Cambia el tablero seleccionado del menu
+     * @access public
+     * @param  $id string
+     * @return El nuevo valor del tablero
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 17:54:22
+     */
     public function changeSelect($id)
     {
-        $this->boardId = $id;
-        $this->emit('changeBoard', $this->boardId);
+        $this->boardSelected = $id;
+        $this->emit('changeBoard', $this->boardSelected);
     }
 
-    public function receiveIconToBoxicon($icon)
-    {
-        $this->iconBoard = $icon;
-        $this->modalBoxicon = false;
-    }
-
+    /**
+     * title: Guarda lista
+     * Descripción: Guarda la nueva lista
+     * @access public
+     * @param  Parametros necesarios para la nueva lista
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 17:56:16
+     */
     public function saveBoard()
     {
         $rules = [
@@ -96,27 +141,105 @@ class TaskIndexController extends Component
 
         $this->validate($rules, $messages);
 
-        Board::create([
+        $newBoard = Board::create([
             'name' => $this->nameBoard,
             'icono' => $this->iconBoard,
             'comment' => $this->commentBoard,
             'author_id' => Auth::user()->id
         ]);
+
+        $background = PredefinedFile::where('module', 'todo-list')
+            ->where('use', 'background')
+            ->orderBy('name')
+            ->get();
+
+        if ($background->count() > 0) {
+            $newBoard->background_image = $background->random()->url_file;
+            $newBoard->save();
+        }
+
         $this->resetVarBoard();
         $this->crateBoard  = false;
     }
 
+    /**
+     * title: Recibe Icons
+     * Descripción: Recibe el icono del componente livewire boxicon
+     * @access public
+     * @param  $icon string
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 18:04:58
+     */
+    public function receiveIconToBoxicon($icon)
+    {
+        $this->iconBoard = $icon;
+        $this->modalBoxicon = false;
+    }
+
+    /**
+     * title: Reset variebles Board
+     * Descripción: Resetea las variables y validaciones del board
+     * @access public
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 18:06:16
+     */
     public function resetVarBoard()
     {
         $this->nameBoard = "";
         $this->iconBoard = "";
         $this->commentBoard = "";
+        $this->resetValidation();
     }
 
+    /**
+     * title: Open modal Board
+     * Descripción: Abre el moadl para crear una nueva lista
+     * @access public
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 18:07:32
+     */
+    public function openViewCreateBoard()
+    {
+        $this->crateBoard = true;
+    }
+
+    /**
+     * title: Close modal Board
+     * Descripción: Cierra y resetea los parametros del modal Board
+     * @access public
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-02-07 18:07:32
+     */
     public function closeViewCreateBoard()
     {
         $this->resetVarBoard();
-        $this->resetValidation();
         $this->crateBoard = false;
+    }
+
+
+
+    public function editNote(Task $task)
+    {
+        // dd($task);
+        $this->emit('set-data-editor', $task->content);
+        $this->taskEdit = $task;
+        // $this->newComment = $task->content;
+        $this->modalNoteTask = true;
+    }
+
+    public function saveNoteTask($body)
+    {
+        // dd($body);
+        $this->taskEdit->content = $body;
+        $this->taskEdit->save();
+        $this->closeModalEditNote();
+        $this->emitTo('to-do.board-show', '$refresh');
+        $this->emitTo('to-do.task-show', '$refresh');
+    }
+
+    public function closeModalEditNote()
+    {
+        $this->reset(['taskEdit']);
+        $this->modalNoteTask = false;
     }
 }

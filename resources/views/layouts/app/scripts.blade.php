@@ -1,8 +1,10 @@
 <script src="{{ asset('js/boxicons.js') }}"></script>
 
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
 <script src="{{ asset('plugins/jquery-3.1.1.min.js') }}"></script>
 <script src="{{ asset('plugins/sweetalerts/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('plugins/notification/snackbar/snackbar.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 
@@ -73,13 +75,11 @@
             // Recuerda, this es el elemento
             console.log("Click en boton :" ,this.dataset.action);
 
-            if (this.dataset.action == 'open')
-                srcollBody.classList.add('overflow-hidden')
-            else
+            if (this.dataset.action == 'open'){
+                srcollBody.classList.add('overflow-hidden');
+            }else{
                 srcollBody.classList.remove('overflow-hidden');
-            endif
-
-
+            }
         }
         // botones es un arreglo así que lo recorremos
         botones.forEach(boton => {
@@ -88,6 +88,15 @@
         });
 </script>
 
+
+<script type="text/javascript">
+    var tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl);
+  });
+</script>
 
 @livewireScripts
 @stack('scripts')
@@ -144,4 +153,12 @@
         iconContainer.appendChild(iconShow);
         //console.log(iconContainer);
     }
+</script>
+
+{{-- Quitar cuando el spinner cuando esta lista la pagina --}}
+<script>
+    window.onload = function() {
+      const loader = document.getElementById('loader_main');
+      loader.className = 'hidden';
+    };
 </script>

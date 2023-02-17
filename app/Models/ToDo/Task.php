@@ -2,7 +2,9 @@
 
 namespace App\Models\ToDo;
 
+use App\Models\File;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +31,6 @@ class Task extends Model
      */
     protected $withCount = [
         'steps',
-        'collaborators'
     ];
 
     /**
@@ -39,10 +40,67 @@ class Task extends Model
      */
     public $dates = [
         'date_expiration',
+        'date_remind_me',
+        'date_my_day',
         'created_at',
         'updated_at',
     ];
 
+    // ==================================================================
+    // FUNCIONES: métodos static de la tarea
+    // =================================================================
+
+    // Obtienen  la tarea a eliminar
+    public static function getTaskToDelete($id)
+    {
+        $task = Task::find($id);
+        if ($task != null) {
+            if ($task->children->count() > 0) {
+                foreach ($task->children as $subtask) {
+                    Task::deleteTask($subtask->id);
+                }
+            }
+            Task::deleteTask($task->id);
+            return true;
+        }
+        return false;
+    }
+
+    // Elimina la tarea
+    public static function deleteTask($id)
+    {
+        $task = Task::find($id);
+        if ($task != null) {
+            DB::beginTransaction();
+            try {
+                // Eliminar colaboradores
+                if ($task->collaborators->count() > 0) {
+                    $task->collaborators()->detach();
+                }
+
+                // Eliminar pasos
+                if ($task->steps) {
+                    foreach ($task->steps as $step) {
+                        $step->delete();
+                    }
+                }
+
+                //Eliminar tarea
+                $task->delete();
+
+                DB::commit();
+                return true;
+            } catch (\Exception $e) {
+                DB::rollback();
+                return $e->getMessage();
+            }
+        }
+        return false;
+    }
+
+    // ==================================================================
+    // FIN DE FUNCIONES static
+    // =================================================================
 
     public function getIsTodayAttribute()
     {
@@ -50,6 +108,14 @@ class Task extends Model
 
         if ($this->date_expiration) {
             $asigned = $this->date_expiration->format('Y-m-d') == now()->format('Y-m-d') ? true : false;
+        }
+
+        if ($this->status == 'Trabajando') {
+            $asigned = true;
+        }
+
+        if ($this->date_my_day) {
+            $asigned = $this->date_my_day->format('Y-m-d') == now()->format('Y-m-d') ? true : false;
         }
 
         return $asigned;
@@ -67,12 +133,17 @@ class Task extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Task::class, 'task_id');
+        return $this->morphOne(Task::class, 'taskable');
     }
 
     public function children()
     {
-        return $this->hasMany(Task::class);
+        return $this->morphMany(Task::class, 'taskable');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 
     /**
@@ -88,17 +159,26 @@ class Task extends Model
     /**
      * The collaborators task.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function collaborators()
     {
-        return $this->hasMany(CollaboratorTasks::class);
+        return $this->belongsToMany(User::class, 'collaborators_tasks')->withPivot('permissions', 'assigned_task');
     }
 
 
     public function scopeToday($query)
     {
-        return $query->whereDate('date_expiration', '=', now()->format('Y-m-d'));
+        return $query->where(function ($query) {
+            $query->whereDate('date_expiration', '=', now()->format('Y-m-d'))
+                ->orWhere('status', 'Trabajando')
+                ->orWhereDate('date_my_day', '=', now()->format('Y-m-d'));
+        });
+    }
+
+    public function scopeWorking($query)
+    {
+        return $query->orWhere('status', 'Trabajando');
     }
 
     public function scopeImportant($query)
@@ -113,6 +193,12 @@ class Task extends Model
         } else {
             return $query->where('author_id', Auth::user()->id);
         }
+    }
+
+    public function scopeSearch($query, $search = '')
+    {
+
+        return $query->author()->where('title', 'like', '%' . $search . '%');
     }
 
     public function scopeRetarded($query)

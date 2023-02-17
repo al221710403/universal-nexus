@@ -43,8 +43,8 @@ class TestController extends Controller
         // $datos = fread($fp, filesize($name));
         // fclose($fp);
 
-        // return view('test', compact('datos'));
-        return view('test-boxicons', compact('json_boxicons', 'boxicons'));
+        return view('test2');
+        // return view('test-boxicons', compact('json_boxicons', 'boxicons'));
         // dd($datos);
         // $sizeFile = fpassthru($fp);
 

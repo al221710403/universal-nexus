@@ -107,6 +107,14 @@
         <div class="bg-fixed bg-cover grid grid-cols-3 border border-red-500 basis-full overflow-y-auto bg-origin-content bg-no-repeat"
             style="background-image: url('https://images.pexels.com/photos/417192/pexels-photo-417192.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')">
             <section class="relative col-span-2 pt-2 text-white overflow-hidden">
+                <button data-tooltip-target="tooltip-default" type="button"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Default
+                    tooltip</button>
+                <div id="tooltip-default" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    Tooltip content
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
                 <header class=" shadow-2xl rounded-lg px-4 py-1 mb-2" x-data="{ search: false }">
                     <div class="flex justify-between items-center mb-1.5 flex-wrap">
                         <h2 class="text-lg font-semibold tracking-wide">Tareas</h2>
@@ -254,6 +262,17 @@
             </section>
 
             <section class="bg-white z-20 py-2 px-3">
+
+                toggleEditingState
+                <div x-data="data()" class="p-4">
+                    <p @click.prevent @dblclick="toggleEditingState" x-show="!isEditing" x-text="text"
+                        class="select-none cursor-pointer"></p>
+                    <input type="text" x-model="text" x-show="isEditing" @click.away="toggleEditingState"
+                        @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
+                        class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
+                        x-ref="input">
+                </div>
+
                 <header class="mb-1.5 flex items-start justify-between">
                     <div class="flex items-start flex-1 cursor-pointer">
                         <input type="checkbox" class="mt-1.5 rounded-full">
@@ -272,192 +291,236 @@
                                 <span><i class='bx bx-x'></i></span>
                             </button>
                         </li>
-                        <li class="flex items-center text-xl">
-                            <button title="Opciones">
-                                <span><i class='bx bx-dots-vertical-rounded'></i></span>
-                            </button>
-                        </li>
                     </ul>
                 </header>
                 <hr />
-                <div class="mt-2 flex flex-wrap items-center justify-between">
 
-                    <div class="flex items-center">
-                        <div class="mr-4 w-10 h-10 rounded-full shadow">
-                            <img class="w-full h-full overflow-hidden object-cover object-center rounded-full"
-                                src="https://tuk-cdn.s3.amazonaws.com/assets/components/popovers/p_1_0.png"
-                                alt="avatar" />
-                        </div>
-                        <div>
-                            <h4 class="mb-2 sm:mb-1 text-gray-700 text-sm font-normal leading-4">
-                                Andres Berlin
-                            </h4>
-                            <p class="text-gray-600 text-xs leading-3">
-                                12 Enero
+                {{-- Agregar pasos --}}
+                <div class="mt-2">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex text-blue-500 items-center pl-3 z-10">
+                            <i class='bx bx-plus bx-sm'></i>
+                        </span>
+                        <input type="text" id="search" autocomplete="off"
+                            class="w-full text-sm block pl-10 p-2 border border-white rounded-md focus:border-blue-500 placeholder-blue-500 text-gray-500"
+                            placeholder="Agregar paso">
+                    </div>
+                    <ul class="mt-2 ml-8 mb-3">
+                        <li class="relative flex flex-wrap items-center hover:shadow-xl py-1 px-2 mb-2">
+                            <input type="checkbox" class="rounded-full">
+                            <p class="ml-1.5 text-sm font-semibold text-gray-500"> Lorem ipsum dolor sit
+                                amet.
                             </p>
+                            <span class="absolute right-0 cursor-pointer">
+                                <i class='bx bx-x'></i>
+                            </span>
+                        </li>
+                        <li class="relative flex items-center hover:shadow-xl py-1 px-2 mb-2">
+                            <input type="checkbox" class="rounded-full">
+                            <p class="ml-1.5 text-sm font-semibold text-gray-500">
+                                Lorem ipsum dolor sit amet, consectetur.
+                            </p>
+                            <span class="absolute right-0 cursor-pointer">
+                                <i class='bx bx-x'></i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="relative mb-3" x-data="{ open: false }">
+                    {{-- <button x-on:click="open = ! open"
+                        class="w-full text-left mb-3 text-sm block p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
+                        <span class="mr-1.5">
+                            <i class='bx bx-alarm'></i>
+                        </span>
+                        Avisame a las 14:00
+                        Hoy
+                    </button> --}}
+
+                    <div
+                        class="flex w-full text-left mb-3 text-sm p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
+                        <span class="mr-1.5">
+                            <i class='bx bx-alarm'></i>
+                        </span>
+                        <div class="flex-1">
+                            <div class="block">
+                                Avisame a las 14:00
+                            </div>
+                            <p class="text-xs font-semibold">Hoy</p>
                         </div>
                     </div>
 
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="transform opacity-0 scale-95"
+                        x-transition:enter-end="transform opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="transform opacity-100 scale-100"
+                        x-transition:leave-end="transform opacity-0 scale-95"
+                        class="absolute w-full rounded-md shadow-lg top-9">
+                        <div class="rounded-md ring-1 ring-black ring-opacity-5 py-1 bg-white ">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                <input type="datetime-local"
+                                    class="w-full text-sm block rounded-md border border-white focus:border-blue-500 placeholder-blue-500 mb-2">
 
-                    <div class="flex flex-col items-end justify-end mb-3">
-                        <div class="flex items-center justify-center">
-                            <img class="w-6 h-6 rounded-full border-gray-200 border transform hover:scale-125"
-                                src="https://randomuser.me/api/portraits/men/1.jpg" />
-                            <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
-                                src="https://randomuser.me/api/portraits/women/2.jpg" />
-                            <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
-                                src="https://randomuser.me/api/portraits/men/3.jpg" />
+                                <div class="border-t border-gray-100"></div>
+                                <div class="flex justify-end items-center mt-2">
+                                    <button
+                                        class="mr-2 rounded-md border border-red-500 text-red-500 hover:bg-red-600 hover:text-white px-2 py-1 text-md"
+                                        x-on:click="open = ! open">
+                                        Cancelar
+                                    </button>
+
+                                    <button
+                                        class="mr-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-600 hover:text-white px-2 py-1 text-md"
+                                        x-on:click="open = ! open">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-red-600 font-semibold text-xs leading-3 mt-1">
-                            12 Febrero <span><i class='bx bx-calendar ml-1'></i></span>
-                        </p>
-
                     </div>
                 </div>
 
-                <div class="text-gray-700">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit
-                        temporibus nemo
-                        perferendis minima sapiente ipsum! Vero labore quibusdam a non sit, rem iure id unde nam quae
-                        quas architecto maiores.
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit temporibus nemo
-                        perferendis minima sapiente ipsum! Vero labore quibusdam a non sit, rem iure id unde nam quae
-                        quas architecto maiores.
-                    </p>
+                <div class="relative mb-3" x-data="{ open: false }">
+                    {{-- <button x-on:click="open = ! open"
+                        class="w-full text-left mb-3 text-sm block p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
+                        <span class="mr-1.5">
+                            <i class='bx bx-calendar'></i>
+                        </span>
+                        Agregar fecha de vencimiento
+                    </button> --}}
 
-                    <ul class="ml-5 mt-3">
-                        <li class="flex items-start mb-1.5">
-                            <input type="checkbox" class="mt-1.5 mr-2 rounded-full">
-                            <p>Ir a la case para hacer algo</p>
-                        </li>
-                        <li class="flex items-start mb-1.5">
-                            <input type="checkbox" class="mt-1.5 mr-2 rounded-full">
-                            <p>Lorem ipsum dolor sit amet.</p>
-                        </li>
-                        <li class="flex items-start mb-1.5">
-                            <input type="checkbox" class="mt-1.5 mr-2 rounded-full">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                    <div
+                        class="flex w-full text-left mb-3 text-sm p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
+                        <span class="mr-1.5">
+                            <i class='bx bx-calendar'></i>
+                        </span>
+                        <div class="flex-1">
+                            <div class="block">
+                                Vence a las 14:00
+                            </div>
+                            <p class="text-xs font-semibold">15 de Febrero</p>
+                        </div>
+                    </div>
+
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="transform opacity-0 scale-95"
+                        x-transition:enter-end="transform opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="transform opacity-100 scale-100"
+                        x-transition:leave-end="transform opacity-0 scale-95"
+                        class="absolute w-full rounded-md shadow-lg top-9">
+                        <div class="rounded-md ring-1 ring-black ring-opacity-5 py-1 bg-white ">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                <input type="datetime-local"
+                                    class="w-full text-sm block rounded-md border border-white focus:border-blue-500 placeholder-blue-500 mb-2">
+
+                                <div class="border-t border-gray-100"></div>
+                                <div class="flex justify-end items-center mt-2">
+                                    <button
+                                        class="mr-2 rounded-md border border-red-500 text-red-500 hover:bg-red-600 hover:text-white px-2 py-1 text-md"
+                                        x-on:click="open = ! open">
+                                        Cancelar
+                                    </button>
+
+                                    <button
+                                        class="mr-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-600 hover:text-white px-2 py-1 text-md"
+                                        x-on:click="open = ! open">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {{-- datetime-local --}}
+                    {{-- <input
+                        class="cursor-pointer w-full text-sm block pl-10 p-2 border border-white rounded-md focus:border-blue-500 placeholder-blue-500 text-gray-500"
+                        placeholder="Recordarme"> --}}
+                </div>
+
+                <div class="mb-3">
+                    <button
+                        class="w-full text-left mb-1.5 text-sm block p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
+                        <span class="mr-1.5">
+                            <i class='bx bx-paperclip bx-rotate-270'></i>
+                        </span>
+                        Agregar archivos
+                    </button>
+
+                    <ul class="ml-8">
+                        <li class="flex flex-wrap items-center justify-between hover:shadow-xl py-1 px-2 mb-2">
+                            <div class="flex text-gray-500">
+                                <span class="mr-2">
+                                    <i class='bx bx-file'></i>
+                                </span>
+                                <p class="text-sm"> Lorem ipsum dolor sit
+                                    amet.
+                                </p>
+                            </div>
+                            <ul class="flex">
+                                <li class="mr-1 cursor-pointer" title="Ver">
+                                    <span>
+                                        <i class='bx bx-fullscreen'></i>
+                                    </span>
+                                </li>
+                                <li class="mr-1 cursor-pointer" title="Descargar">
+                                    <span>
+                                        <i class='bx bx-cloud-download'></i>
+                                    </span>
+                                </li>
+                                <li class="cursor-pointer" title="Eliminar">
+                                    <span>
+                                        <i class='bx bx-trash-alt'></i>
+                                    </span>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
 
-                    <hr />
+                </div>
 
-                    <section class="mt-1.5">
-                        <h3 class="text-base font-semibold text-gray-800 flex items-center"> <span class="text-xl"><i
-                                    class='bx bx-notepad mr-1'></i></span>
-                            Subtareas</h3>
-                        <ul class="ml-5 mt-1.5">
-                            <li class="flex items-start mb-1.5">
-                                <input type="checkbox" class="mt-1.5 mr-2 rounded-full">
-                                <p>Subtarea 1</p>
-                            </li>
-                            <li class="flex items-start mb-1.5">
-                                <input type="checkbox" class="mt-1.5 mr-2 rounded-full">
-                                <p>Subtarea 2</p>
-                            </li>
-                        </ul>
-                    </section>
-                    <hr />
+                <button
+                    class="w-full text-left mb-3 text-sm block p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-yellow-500 hover:font-semibold">
+                    <span class="mr-1.5">
+                        <i class="bx bx-sun"></i>
+                    </span>
+                    Agregar a Mi día
+                </button>
 
-                    <section class="mt-1.5">
-                        <h3 class="text-base font-semibold text-gray-800 flex items-center">
-                            <span class="text-xl">
-                                <i class='bx bx-file mr-1'></i>
-                            </span>
-                            Archivo(s)
-                        </h3>
-                        <ul class="mt-1.5 text-gray-500">
-                            <li title="Descargar documento..."
-                                class="flex rounded-lg items-center mb-1.5 cursor-pointer hover:bg-gray-200 hover:text-gray-600 hover:font-semibold">
-                                <i class='bx bxs-file-pdf mr-2 ml-5'></i>
-                                <p>Documento de prueba</p>
-                            </li>
-                            <li title="Descargar imagen..."
-                                class="flex rounded-lg items-center mb-1.5 cursor-pointer hover:bg-gray-200 hover:text-gray-600 hover:font-semibold">
-                                <i class='bx bxs-file-image mr-2 ml-5'></i>
-                                <p>Imagen de muestra</p>
-                            </li>
-                            <li title="Descargar archivo..."
-                                class="flex rounded-lg items-center mb-1.5 cursor-pointer hover:bg-gray-200 hover:text-gray-600 hover:font-semibold">
-                                <i class='bx bxs-file mr-2 ml-5'></i>
-                                <p>Archivo de mcoresponsdens</p>
-                            </li>
+                <textarea rows="5"
+                    class="w-full mb-3 border border-white px-2 py-1 text-gray-500 rounded-md text-md leading-relaxed tracking-wide placeholder-gray-400"
+                    placeholder="Agregar nota..."></textarea>
 
-                        </ul>
-                    </section>
-
+                <div class="text-gray-400 text-sm text-center">
+                    Creado hace un momento por Cristian Milton Fidel Pascual
                 </div>
             </section>
         </div>
 
-        {{-- <section class="bg-white z-20 py-2 px-3">
-
-            <header class="mb-1.5 flex items-center animate-pulse">
-                <div class="h-2.5 my-auto bg-gray-400 rounded-full w-48"></div>
-            </header>
-            <hr />
-            <div class="mt-2 animate-pulse flex items-center space-x-3">
-                <svg class="text-gray-400 w-14 h-14" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-32 mb-2"></div>
-                    <div class="w-48 h-2 bg-gray-400 rounded-full"></div>
-                </div>
-            </div>
-
-            <div role="status" class="mt-4 space-y-2.5 animate-pulse max-w-lg">
-                <div class="flex items-center w-full space-x-2">
-                    <div class="h-2.5 bg-gray-300 rounded-full w-32"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-24"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                </div>
-                <div class="flex items-center w-full space-x-2 max-w-[480px]">
-                    <div class="h-2.5 bg-gray-300 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-24"></div>
-                </div>
-                <div class="flex items-center w-full space-x-2 max-w-[400px]">
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-300 rounded-full w-80"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                </div>
-                <div class="flex items-center w-full space-x-2 max-w-[480px]">
-                    <div class="h-2.5 bg-gray-300 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-24"></div>
-                </div>
-                <div class="flex items-center w-full space-x-2 max-w-[440px]">
-                    <div class="h-2.5 bg-gray-400 rounded-full w-32"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-24"></div>
-                    <div class="h-2.5 bg-gray-300 rounded-full w-full"></div>
-                </div>
-                <div class="flex items-center w-full space-x-2 max-w-[360px]">
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                    <div class="h-2.5 bg-gray-300 rounded-full w-80"></div>
-                    <div class="h-2.5 bg-gray-400 rounded-full w-full"></div>
-                </div>
-                <span class="sr-only">Loading...</span>
-            </div>
-
-            <div class="mt-3 space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center">
-                <div role="status" class="w-full">
-                    <div class="h-2.5 bg-gray-400 rounded-full w-48 mb-4"></div>
-                    <div class="h-2 bg-gray-400 rounded-full max-w-[480px] mb-2.5"></div>
-                    <div class="h-2 bg-gray-400 rounded-full mb-2.5"></div>
-                    <div class="h-2 bg-gray-400 rounded-full max-w-[440px] mb-2.5"></div>
-                    <div class="h-2 bg-gray-400 rounded-full max-w-[460px] mb-2.5"></div>
-                    <div class="h-2 bg-gray-400 rounded-full max-w-[360px]"></div>
-                </div>
-            </div>
-        </section> --}}
-
 
     </div>
     @push('scripts')
+    <script>
+        function data() {
+            return {
+            text: "Example text. vkhkv",
+            isEditing: false,
+                toggleEditingState() {
+                this.isEditing = !this.isEditing;
+                    if (this.isEditing) {
+                        this.$nextTick(() => {
+                        this.$refs.input.focus();
+                        });
+                    }
+                },
+                disableEditing() {
+                this.isEditing = false;
+                }
+            };
+        }
+    </script>
 
     @endpush
 </x-app-layout>

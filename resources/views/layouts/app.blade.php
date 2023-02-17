@@ -11,31 +11,33 @@
     @include('layouts.app.styles')
 </head>
 
-<body class="body-mdl font-sans antialiased min-h-screen max-h-full bg-gray-100">
-    <x-jet-banner />
+<body class="body-mdl font-sans antialiased min-h-screen max-h-full bg-gray-100 relative">
+    {{--
+    <x-jet-banner /> --}}
     {{-- <div class="overflow-hidden hidden"></div> --}}
-    <div class="flex flex-col min-h-screen">
-        @livewire('navigation-menu')
+    <div class="min-h-screen" id="main">
+        {{-- <div class="flex flex-col min-h-screen"> --}}
+            @livewire('navigation-menu')
 
-        {{--
-        <!-- Page Heading -->
-        @if (isset($header))
-        <header class="bg-white shadow border-gray-700 border-4">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header>
-        @endif --}}
+            <!-- Page Content -->
+            <main class="flex">
+                {{-- <main class="flex-1 flex"> --}}
+                    <div id="loader_main" class="inset-0 h-full w-full fixed overflow-x-hidden overflow-y-auto bg-white"
+                        style="z-index: 90;">
+                        <div class="h-full w-full flex justify-center items-center">
+                            <div class="lds-ripple">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ $slot }}
+                </main>
+        </div>
 
-        <!-- Page Content -->
-        <main class="flex-1 flex">
-            {{ $slot }}
-        </main>
-    </div>
+        @stack('modals')
 
-    @stack('modals')
-
-    @include('layouts.app.scripts')
+        @include('layouts.app.scripts')
 </body>
 
 </html>
