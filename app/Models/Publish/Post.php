@@ -2,15 +2,19 @@
 
 namespace App\Models\Publish;
 
+use App\Models\Tag;
 use App\Models\User;
+use App\Traits\TagTrait;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Post extends Model
 {
     use HasFactory;
+    use TagTrait;
 
     /**
      * The attributes that aren't mass assignable.
@@ -45,20 +49,20 @@ class Post extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'posts_tags', 'post_id', 'tag_id');
-    }
+    // public function tags()
+    // {
+    //     return $this->morphToMany(Tag::class, 'taggable', 'taggables');
+    // }
 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
 
-    public function tagsFilter()
-    {
-        return $this->hasMany(PosTag::class, 'post_id', 'id');
-    }
+    // public function tagsFilter()
+    // {
+    //     return $this->hasMany(PosTag::class, 'post_id', 'id');
+    // }
 
     /**
      * The post author.
@@ -204,7 +208,7 @@ class Post extends Model
     {
         if (!empty($slugs)) {
             // return $query->whereIn('id',  $slugs);
-            return $query->whereHas('tagsFilter', function ($query) use ($slugs) {
+            return $query->whereHas('tags', function ($query) use ($slugs) {
                 $query->whereIn('tag_id', $slugs);
             });
         } {

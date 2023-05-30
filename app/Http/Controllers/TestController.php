@@ -117,4 +117,18 @@ class TestController extends Controller
 
         dd($datos);
     }
+
+
+    public function ajaxView()
+    {
+        return view('ajax.index');
+    }
+
+
+    public function ajax(Request $request)
+    {
+        return response()->json(['success' => 'User Updated Successfully!']);
+        // dd($request->all());
+        // echo "Datos recibidos"; //simplemente haremos que devuelva esto
+    }
 }

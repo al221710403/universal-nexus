@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Publish;
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
-use App\Models\Publish\Tag;
+use App\Models\Tag;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
 use App\Models\Publish\Image;
@@ -27,6 +27,11 @@ class PostIndexController extends Component
 
     public function mount()
     {
+        $new = Post::find(2);
+
+        // $new->detachTags(['tag6']);
+        $new->attachTags(['tag4', 'tag5'], 'Post');
+
         $this->column = 'publish_date';
         $this->order = 'desc';
         $this->pagination = 8;
@@ -73,6 +78,7 @@ class PostIndexController extends Component
                 ->orderBy($this->column, $this->order)
                 ->paginate($this->pagination);
         }
+
 
         return view('livewire.publish.post.index', compact("posts", "all_post"));
     }

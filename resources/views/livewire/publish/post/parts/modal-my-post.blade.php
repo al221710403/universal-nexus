@@ -1,4 +1,4 @@
-<x-modal wire:model="my_posts" maxWidth="full">
+<x-modal wire:model="my_posts" maxWidth="full" index="30">
     <x-slot name="title">
         <span class="mr-2"><i class='bx bxs-notepad'></i></span> Mis artículos
     </x-slot>

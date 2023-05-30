@@ -1,8 +1,7 @@
 <?php
 
-namespace Database\Factories\Publish;
+namespace Database\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TagFactory extends Factory
@@ -16,8 +15,8 @@ class TagFactory extends Factory
     {
 
         return [
-            'name' => $this->faker->sentence(2),
-            'color' => $this->faker->randomElement(['red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink']),
+            'name' => $this->faker->sentence(2)
+            // 'color' => $this->faker->randomElement(['red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink']),
         ];
     }
 }

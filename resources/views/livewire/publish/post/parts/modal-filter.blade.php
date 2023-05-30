@@ -1,4 +1,4 @@
-<x-modal wire:model="filters" maxWidth="md">
+<x-modal wire:model="filters" maxWidth="md" index="30">
     <x-slot name="title">
         Filtros
     </x-slot>

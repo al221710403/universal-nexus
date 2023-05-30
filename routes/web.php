@@ -26,6 +26,16 @@ use App\Http\Livewire\Publish\PostIndexController;
 // });
 Route::redirect('/', '/publish/posts');
 
+Route::get('/ajax', [TestController::class, 'ajaxView']);
+
+
+
+Route::post('miJqueryAjax', [TestController::class, 'ajax']);
+
+
+
+
+
 Route::get('/test', [TestController::class, 'test']);
 Route::post('/test-store', [TestController::class, 'store'])->name('test.store');
 

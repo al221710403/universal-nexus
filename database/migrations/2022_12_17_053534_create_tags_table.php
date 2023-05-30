@@ -15,9 +15,12 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->smallInteger('used')->default(0);
-            $table->char('color', 15)->nullable()->default('green');
+            $table->string('name');
+            $table->string('slug')->unique()->nullable();
+            $table->string('type')->nullable();
+            // $table->smallInteger('used')->default(0);
+            // $table->char('color', 15)->nullable()->default('green');
+            $table->unique(['name', 'type']);
             $table->timestamps();
         });
     }
