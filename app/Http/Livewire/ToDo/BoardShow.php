@@ -316,16 +316,20 @@ class BoardShow extends Component
      */
     public function saveTask()
     {
-        $task = Task::create([
-            "title" => $this->newTask,
-            "author_id" => Auth::user()->id,
-            "board_id" => $this->board->id
-        ]);
-        $this->newTask = "";
-        $this->emitTo('to-do.task-index-controller', '$refresh');
-        $this->emitTo('to-do.task-show', 'getTaskId', $task->id, 'edit');
-        $this->showTaskId = $task->id;
-        $this->emit('noty-primary', 'Cambios guardados');
+        if (strlen($this->newTask) > 0) {
+            $task = Task::create([
+                "title" => $this->newTask,
+                "author_id" => Auth::user()->id,
+                "board_id" => $this->board->id
+            ]);
+            $this->newTask = "";
+            $this->emitTo('to-do.task-index-controller', '$refresh');
+            $this->emitTo('to-do.task-show', 'getTaskId', $task->id, 'edit');
+            $this->showTaskId = $task->id;
+            $this->emit('noty-primary', 'Tarea creada');
+        } else {
+            $this->emit('noty-warning', 'Debe de escribir una tarea');
+        }
     }
 
     /**

@@ -26,7 +26,8 @@
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded text-sm focus:ring-2 hover:bg-slate-200">
                         <label for="{{$tag->id}}"
                             class="w-full ml-2 text-sm font-medium text-gray-900 rounded hover:text-blue-600">{{$tag->name}}
-                            <span class="ml-1 rounded-md border border-gray-200 p-1">{{$tag->used}}</span></label>
+                            {{-- <span class="ml-1 rounded-md border border-gray-200 p-1">{{$tag->used}}</span> --}}
+                        </label>
                     </div>
                 </li>
                 @endforeach

@@ -358,7 +358,7 @@
     @endif
 
     {{-- Subtarea(s) --}}
-    @if (!$task->parent)
+    {{-- @if (!$task->parent)
     <div class="mb-3">
         <button
             class="w-full text-left mb-1.5 text-sm block p-2 pl-4 rounded-md hover:shadow-lg text-gray-500 hover:text-blue-500 hover:font-semibold">
@@ -400,7 +400,7 @@
         </ul>
         @endif
     </div>
-    @endif
+    @endif --}}
 
 
 

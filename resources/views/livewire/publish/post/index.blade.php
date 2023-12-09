@@ -124,7 +124,8 @@
                 <div class="flex mt-3">
                     <img src="{{$post->author->profile_photo_url}}" class="h-10 w-10 rounded-full mr-2 object-cover" />
                     <div>
-                        <p class="font-semibold text-gray-200 text-sm"> {{$post->author->name}} </p>
+                        <p class="font-semibold text-gray-200 text-sm cursor-pointer"
+                            wire:click="$set('author_id', {{$post->author->id}})"> {{$post->author->name}} </p>
                         <p class="font-semibold text-gray-400 text-xs">
                             <time datetime=" {{$post->publish_date}}">
                                 <i class='bx bxs-calendar'></i>

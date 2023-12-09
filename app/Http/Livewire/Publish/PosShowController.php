@@ -19,7 +19,7 @@ class PosShowController extends Component
 
         if ($tags->count() > 0) {
             $similares = Post::where('id', '!=', $this->post->id)
-                ->tagsf($tags->pluck('id')->toArray())
+                ->tagsSearch($tags->pluck('id')->toArray())
                 ->published()
                 ->latest('id')
                 ->take(6)

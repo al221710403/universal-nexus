@@ -131,6 +131,14 @@ class Task extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
+    /**
+     * Get the parent commentable model (post or video).
+     */
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+
     public function parent()
     {
         return $this->morphOne(Task::class, 'taskable');

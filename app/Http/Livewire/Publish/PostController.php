@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Publish;
 
-use App\Models\Publish\Image;
 use Carbon\Carbon;
+use Spatie\Tags\Tag;
 use Livewire\Component;
-use App\Models\Publish\Tag;
+// use App\Models\Publish\Tag;
 use Illuminate\Support\Str;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
+use App\Models\Publish\Image;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +70,7 @@ class PostController extends Component
 
         if ($tags->count() > 0) {
             $similares = Post::where('id', '!=', $this->post->id)
-                ->tagsf($tags->pluck('id')->toArray())
+                ->tagsSearch($tags->pluck('id')->toArray())
                 ->published()
                 ->latest('id')
                 ->take(3)
@@ -200,7 +201,8 @@ class PostController extends Component
 
             // Elimina los tags asociados al post
             if ($tags->count() > 0) {
-                $this->post->tags()->detach($tags->pluck('id')->toArray());
+                $this->post->detachTags($tags->pluck('name')->toArray());
+                // $this->post->tags()->detach($tags->pluck('id')->toArray());
             }
 
             // Elimina la imagen
@@ -274,45 +276,10 @@ class PostController extends Component
     public function addTags()
     {
         // Busca y crea el tag en caso de que no exista y lo agrega al post
-        foreach ($this->tags as $item) {
-            $tag = Tag::firstOrCreate([
-                'name' => ucwords(strtolower($item)),
-            ]);
-
-            if ($this->post->tags()->where('tag_id', $tag->id)->count() == 0) {
-                $this->post->tags()->attach($tag->id);
-                $tag->used = $tag->used + 1;
-                $tag->save();
-            }
-        }
-
-        // Manda a llanar la funcion para eliminar la relación de los tags
-        $deleteTags = array_diff($this->old_tags, $this->tags);
-        $this->deleteTags($deleteTags);
+        $this->post->syncTags($this->tags);
     }
 
-    /**
-     * title: Elimina los tags
-     * Descripción: Elimina la relación que tienen los tags con el post
-     * @access public
-     * @param  array $tags
-     * @return message
-     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
-     * @date 2023-01-25 23:54:01
-     */
-    public function deleteTags($tags)
-    {
-        foreach ($tags as $item) {
-            $tag = Tag::firstWhere('name', $item);
-            if ($tag) {
-                $this->post->tags()->detach($tag->id);
-                $tag->used = $tag->used == 0 ? $tag->used : $tag->used - 1;
-                $tag->save();
-            } else {
-                $this->emit('noty-danger', 'Ups!! Hubo un error al eliminar el tag: ' . $item);
-            }
-        }
-    }
+
 
     //==================================================
 

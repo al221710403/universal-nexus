@@ -2,9 +2,9 @@
 
 namespace App\Models\Publish;
 
-use App\Models\Tag;
 use App\Models\User;
-use App\Traits\TagTrait;
+// use App\Traits\TagTrait;
+use Spatie\Tags\HasTags;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Post extends Model
 {
     use HasFactory;
-    use TagTrait;
+    use HasTags;
+    // use TagTrait;
 
     /**
      * The attributes that aren't mass assignable.
@@ -44,25 +45,12 @@ class Post extends Model
         'markdown' => 'boolean',
     ];
 
-    /**
-     * The tags the post belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    // public function tags()
-    // {
-    //     return $this->morphToMany(Tag::class, 'taggable', 'taggables');
-    // }
 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
 
-    // public function tagsFilter()
-    // {
-    //     return $this->hasMany(PosTag::class, 'post_id', 'id');
-    // }
 
     /**
      * The post author.
@@ -159,7 +147,7 @@ class Post extends Model
         return $query->where('publish_date', '>', now());
     }
 
-    public function scopeAuthor($query, $id)
+    public function scopeAuthorSearch($query, $id)
     {
         if ($id) {
             return $query->where('author_id', $id);
@@ -204,20 +192,17 @@ class Post extends Model
      * @param  string  $slug
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTagsf($query, $slugs)
+    public function scopeTagsSearch($query, $tags)
     {
-        if (!empty($slugs)) {
-            // return $query->whereIn('id',  $slugs);
-            return $query->whereHas('tags', function ($query) use ($slugs) {
-                $query->whereIn('tag_id', $slugs);
+        if (!empty($tags)) {
+            return $query->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('tags.id', $tags);
             });
         } {
             return;
         }
-        // return $query->whereHas('tags', function ($query) use ($slug) {
-        //     $query->where('slug', $slug);
-        // });
     }
+
 
     /**
      * Prepare a date for array / JSON serialization.

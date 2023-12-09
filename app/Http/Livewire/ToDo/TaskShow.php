@@ -229,13 +229,15 @@ class TaskShow extends Component
 
     public function saveStep($id)
     {
-        StepTask::create([
-            'name' => $this->newStep,
-            'complete' => false,
-            'task_id' => $id
-        ]);
-        $this->emitTo('to-do.board-show', '$refresh');
-        $this->newStep = "";
+        if (strlen($this->newStep) > 0) {
+            StepTask::create([
+                'name' => $this->newStep,
+                'complete' => false,
+                'task_id' => $id
+            ]);
+            $this->emitTo('to-do.board-show', '$refresh');
+            $this->newStep = "";
+        }
     }
 
     public function setComplete(Task $task)

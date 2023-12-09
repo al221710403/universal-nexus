@@ -24,8 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Relation::enforceMorphMap([
-            'post' => 'App\Models\Publish\Post'
-        ]);
+        // Relation::enforceMorphMap([
+        //     'post' => 'App\Models\Publish\Post',
+        //     'task' => 'App\Models\ToDo\Task'
+        // ]);
+        // Relation::morphMap([
+        //     'post' => App\Models\Publish\Post::class,
+        //     'video' => App\Models\ToDo\Task::class,
+        // ]);
     }
 }

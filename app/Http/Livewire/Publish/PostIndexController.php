@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Publish;
 
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use App\Models\User;
+use Spatie\Tags\Tag;
 use Livewire\Component;
-use App\Models\Tag;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
 use App\Models\Publish\Image;
@@ -27,11 +27,6 @@ class PostIndexController extends Component
 
     public function mount()
     {
-        $new = Post::find(2);
-
-        // $new->detachTags(['tag6']);
-        $new->attachTags(['tag4', 'tag5'], 'Post');
-
         $this->column = 'publish_date';
         $this->order = 'desc';
         $this->pagination = 8;
@@ -45,7 +40,7 @@ class PostIndexController extends Component
     public function render()
     {
         $this->authors_select = User::all();
-        $this->tags_select = Tag::orderBy('name')->get();
+        $this->tags_select = Tag::all('id', 'name')->sortBy('name');
 
         // Buscador del modal de mis post
         if (strlen($this->searchMyPost) > 0) {
@@ -64,17 +59,17 @@ class PostIndexController extends Component
         // Buscador del index
         if (strlen($this->search) > 0) {
             $posts = Post::where('title', 'like', '%' . $this->search . '%')
-                ->tagsf($this->tags)
+                ->tagsSearch($this->tags)
+                ->authorSearch($this->author_id)
                 ->live()
                 ->public()
-                ->author($this->author_id)
                 ->orderBy($this->column, $this->order)
                 ->paginate($this->pagination);
         } else {
-            $posts = Post::tagsf($this->tags)
+            $posts = Post::tagsSearch($this->tags)
+                ->authorSearch($this->author_id)
                 ->live()
                 ->public()
-                ->author($this->author_id)
                 ->orderBy($this->column, $this->order)
                 ->paginate($this->pagination);
         }
@@ -101,7 +96,8 @@ class PostIndexController extends Component
         try {
             // Elimina los tags asociados al post
             if ($tags->count() > 0) {
-                $post->tags()->detach($tags->pluck('id')->toArray());
+                $post->detachTags($tags->pluck('name')->toArray());
+                // $post->tags()->detach($tags->pluck('id')->toArray());
             }
 
             // Elimina la imagen
