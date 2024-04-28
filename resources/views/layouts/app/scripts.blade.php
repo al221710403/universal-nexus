@@ -37,7 +37,68 @@
         window.livewire.on('noty-primary', msg=>{
             noty(msg,4);
         });
+
+        window.livewire.on('noty-window', data=>{
+            createNotification(data);
+        });
     });
+
+</script>
+
+{{-- Notificaciones de escritorio --}}
+<script>
+    function mostrarNotificacion() {
+        // Verificar si las notificaciones son compatibles con el navegador
+        if ('Notification' in window) {
+            // Solicitar permiso al usuario si aún no se ha solicitado
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        createNotification();
+                    }
+                });
+            } else {
+                // Si ya se otorgó el permiso, crear y mostrar la notificación
+                createNotification();
+            }
+        } else {
+            alert('Las notificaciones no son compatibles en este navegador.');
+        }
+    }
+
+    function createNotification(data) {
+        // Crear y mostrar la notificación
+        let title = data['title'];
+        let body = data['type_notification'] == 'reminder' ? `HEY! tu tarea "${title}" esta apunto de vencer.` : `HEY! tu tarea "${title}" ya expiro.`;
+
+        var notificacion = new Notification('All in one', {
+            body: body,
+            requireInteraction: true,
+            data:data,
+            icon: "{{ asset('img/logo-white-background.svg')}}" // URL de la imagen del icono
+        });
+
+        // Puedes agregar eventos para manejar acciones del usuario, como hacer clic en la notificación
+        notificacion.onclick = function (event) {
+            let data = event.target['data'];
+            markAsRead(data);
+            //console.log('Hiciste click');
+            //console.log(data);
+        };
+
+        notificacion.onclose = function (event) {
+            let data = event.target['data'];
+            markAsRead(data);
+            //console.log('Cerraste ventanak');
+            //console.log(data);
+        };
+    }
+
+    function markAsRead(data){
+        if(data['type_notification'] == 'expiration'){
+            window.livewire.emit('markAsRead',data['task_id'])
+        }
+    }
 
 </script>
 

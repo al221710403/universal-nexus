@@ -9,3 +9,4 @@ project adheres to [Semantic Versioning](https://semver.org).
 
 
 ## [Unreleased]
+## Implementar mckenziearts/laravel-notify para las notificaciones(https://larainfo.com/blogs/laravel-9-toast-notification-with-laravel-notify-example#google_vignette)

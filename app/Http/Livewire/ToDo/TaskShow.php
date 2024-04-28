@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\ToDo;
 
+use App\Models\Notification;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\ToDo\Task;
@@ -10,6 +11,9 @@ use App\Models\ToDo\StepTask;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Notifications\DesktopNotification;
+
+use function GuzzleHttp\Promise\task;
 
 class TaskShow extends Component
 {
@@ -120,6 +124,45 @@ class TaskShow extends Component
         $task->save();
         $this->emitTo('to-do.board-show', '$refresh');
         $this->closeDateExpiration();
+
+        $notificaction = Notification::where('notifiable_type', 'App\Models\User')
+            ->where('notifiable_id',auth()->user()->id)
+            ->whereJsonContains('data->task_id',$task->id)
+            ->get();
+
+        if($notificaction->count() > 0){
+            $notificaction = $notificaction->first();
+            if ($notificaction->read_at && $task->date_expiration->isoFormat('YYYY-MM-DDTHH:mm') > now()->isoFormat('YYYY-MM-DDTHH:mm')) {
+                $notificaction->read_at = null;
+            }
+            // Accede al campo JSON y modifícalo
+            $data = $notificaction->data;
+
+            // Decodificar la cadena JSON en un array asociativo
+            $data = json_decode($data, true);
+
+            // Realiza las modificaciones necesarias
+            $data['date_expiration'] = $task->date_expiration->isoFormat('YYYY-MM-DDTHH:mm');
+
+            // Codificar el array asociativo como una cadena JSON
+            $data = json_encode($data);
+
+            // Asigna los datos actualizados al campo JSON
+            $notificaction->data = $data;
+
+            // Guarda el modelo para persistir los cambios
+            $notificaction->save();
+        }else{
+            $data=[
+                'task_id' => $task->id,
+                'title' => $task->title,
+                'remember_me' => $task->date_remind_me == null ? null : $task->date_remind_me->isoFormat('YYYY-MM-DDTHH:mm'),
+                'date_expiration' => $task->date_expiration == null ? null : $task->date_expiration->isoFormat('YYYY-MM-DDTHH:mm'),
+                'status' => $task->status
+            ];
+
+            auth()->user()->notify(new DesktopNotification($data));
+        }
     }
 
     public function romoveDateExpiration(Task $task)
@@ -183,11 +226,48 @@ class TaskShow extends Component
 
     public function saveDateRemindMe(Task $task)
     {
-        // dd($this->dateRemindMe, $this->typeDateRemindMeSelected);
         $task->date_remind_me = $this->dateRemindMe;
         $task->save();
         $this->emitTo('to-do.board-show', '$refresh');
         $this->closeDateRemindMe();
+
+
+        $notificaction = Notification::where('notifiable_type', 'App\Models\User')
+                    ->where('notifiable_id',auth()->user()->id)
+                    ->whereJsonContains('data->task_id',$task->id)
+                    ->get();
+
+        if($notificaction->count() > 0){
+            $notificaction = $notificaction->first();
+            // Accede al campo JSON y modifícalo
+            $data = $notificaction->data;
+
+            // Decodificar la cadena JSON en un array asociativo
+            $data = json_decode($data, true);
+
+            // Realiza las modificaciones necesarias
+            $data['remember_me'] = $task->date_remind_me->isoFormat('YYYY-MM-DDTHH:mm');
+
+            // Codificar el array asociativo como una cadena JSON
+            $data = json_encode($data);
+
+            // Asigna los datos actualizados al campo JSON
+            $notificaction->data = $data;
+
+            // Guarda el modelo para persistir los cambios
+            $notificaction->save();
+        }else{
+            $data=[
+                'task_id' => $task->id,
+                'title' => $task->title,
+                'remember_me' => $task->date_remind_me == null ? null : $task->date_remind_me->isoFormat('YYYY-MM-DDTHH:mm'),
+                'date_expiration' => $task->date_expiration == null ? null : $task->date_expiration->isoFormat('YYYY-MM-DDTHH:mm'),
+                'status' => $task->status
+            ];
+
+            auth()->user()->notify(new DesktopNotification($data));
+        }
+
     }
 
     public function addToday(Task $task)

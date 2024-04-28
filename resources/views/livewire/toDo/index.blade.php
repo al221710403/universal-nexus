@@ -357,6 +357,10 @@
 </script>
 <script src="{{ asset('vendor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script>
+    setInterval(function() {
+        //console.log("Interval timeout");
+        window.livewire.emit('reviewPendingTasks');
+    }, 60000); // 60000 milisegundos = 1 minuto
     let CKEditor;
     ClassicEditor
         .create( document.querySelector( '#editor' ),{

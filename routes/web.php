@@ -20,11 +20,11 @@ use App\Http\Livewire\Publish\PostIndexController;
 |
 */
 
-// Route::get('/', function () {
-//     // return 'hola';
-//     return view('welcome');
-// });
-Route::redirect('/', '/publish/posts');
+Route::get('/', function () {
+    // return 'hola';
+    return view('welcome');
+});
+// Route::redirect('/', '/publish/posts');
 
 Route::get('/ajax', [TestController::class, 'ajaxView']);
 

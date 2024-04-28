@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\ToDo;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\ToDo\Task;
 use App\Traits\FileTrait;
 use App\Models\ToDo\Board;
+use App\Models\Notification;
 use App\Models\PredefinedFile;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +44,9 @@ class TaskIndexController extends Component
         'receiveIconToBoxicon', //Recibe el icono del modal Boxicon
         'changeSelect',
         'editNote',
-        'saveNoteTask'
+        'saveNoteTask',
+        'reviewPendingTasks',
+        'markAsRead'
     ];
 
     // Quita los espacios iniciales y finales del input
@@ -242,4 +246,58 @@ class TaskIndexController extends Component
         $this->reset(['taskEdit']);
         $this->modalNoteTask = false;
     }
+
+
+
+    public function reviewPendingTasks(){
+        $notificaction_pending = Notification::where('notifiable_type', 'App\Models\User')
+            ->where('notifiable_id',auth()->user()->id)
+            ->whereNull('read_at')
+            ->whereJsonContains('data->status','Pendiente')
+            ->get();
+
+        if($notificaction_pending->count() > 0){
+            foreach ($notificaction_pending as $notify) {
+                // Decodificar la cadena JSON en un array asociativo
+                $data = json_decode($notify->data, true);
+
+                $remember_me = $data['remember_me'] == null ? null : Carbon::parse($data['remember_me'])->isoFormat('YYYY-MM-DDTHH:mm');
+                $date_expiration = $data['date_expiration'] == null ? null : Carbon::parse($data['date_expiration'])->isoFormat('YYYY-MM-DDTHH:mm');
+                $now_date = now()->isoFormat('YYYY-MM-DDTHH:mm');
+
+                if($remember_me != null || $date_expiration != null){
+                    if ($remember_me == $now_date || $date_expiration == $now_date) {
+                        $data['type_notification'] = $this->typeNotification($remember_me,$date_expiration);
+                        $this->emit('noty-window', $data);
+                    }
+                }
+            }
+        }
+    }
+
+    public function typeNotification($remember_me, $date_expiration){
+        $now_date = now()->isoFormat('YYYY-MM-DDTHH:mm');
+        $type = 'not_have';
+
+        if($remember_me == $now_date){
+            $type = 'reminder';
+        }
+
+        if($date_expiration == $now_date){
+            $type = 'expiration';
+        }
+        return $type;
+    }
+
+    public function markAsRead(Task $task){
+        $notificaction = Notification::where('notifiable_type', 'App\Models\User')
+                    ->where('notifiable_id',auth()->user()->id)
+                    ->whereNull('read_at')
+                    ->whereJsonContains('data->task_id',$task->id)
+                    ->first();
+
+        $notificaction->read_at = now();
+        $notificaction->save();
+    }
 }
+
