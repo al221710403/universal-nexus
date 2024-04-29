@@ -13,7 +13,10 @@
         width: 100% !important;
     }
 </style>
-<link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Antic+Didone&family=Bebas+Neue&family=Berkshire+Swash&family=Caveat:wght@400..700&family=Cedarville+Cursive&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Comfortaa:wght@300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Italiana&family=La+Belle+Aurore&family=League+Script&family=Lobster&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat+Subrayada:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Georgian:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shadows+Into+Light+Two&display=swap');
+</style>
 @endpush
 
 
@@ -139,8 +142,8 @@
 @push('scripts')
 <script src="{{ asset('vendor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script src="{{ asset('vendor/prism/prism.js') }}"></script>
-<script src="https://unpkg.com/@yaireo/tagify"></script>
-<script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 
 
 <script>
@@ -179,15 +182,12 @@
       whitelist:@json($all_tags),
       templates: {
         dropdownItem(item) {
-          return `<div ${this.getAttributes(item)}
-                  class='tagify__dropdown__item ${item.class ? item.class : ''}'
-                  tabindex="0"
-                  role="option">
-          ${item.value}
-          <button tabindex="0" data-value="${
-            item.value
-          }" class="ml-4 text-indigo-500">Agregar</button>
-        </div>`;
+            return `<div ${this.getAttributes(item)}
+            class='tagify__dropdown__item ${item.class ? item.class : ''}'
+            tabindex="0"
+            role="option">
+                ${item.value}
+            </div>`;
         },
       },
       hooks: {

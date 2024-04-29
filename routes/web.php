@@ -20,24 +20,18 @@ use App\Http\Livewire\Publish\PostIndexController;
 |
 */
 
-Route::get('/', function () {
-    // return 'hola';
-    return view('welcome');
-});
-// Route::redirect('/', '/publish/posts');
+// Route::get('/', function () {
+//     // return 'hola';
+//     return view('welcome');
+// });
 
-Route::get('/ajax', [TestController::class, 'ajaxView']);
+Route::redirect('/', '/publish/posts');
 
+// Route::get('/ajax', [TestController::class, 'ajaxView']);
+// Route::post('miJqueryAjax', [TestController::class, 'ajax']);
 
-
-Route::post('miJqueryAjax', [TestController::class, 'ajax']);
-
-
-
-
-
-Route::get('/test', [TestController::class, 'test']);
-Route::post('/test-store', [TestController::class, 'store'])->name('test.store');
+// Route::get('/test', [TestController::class, 'test']);
+// Route::post('/test-store', [TestController::class, 'store'])->name('test.store');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
