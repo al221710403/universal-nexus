@@ -11,6 +11,14 @@ trait PostTrait {
 
     private $filesArray = [];
 
+    /**
+     * Descripción: Elimina un post y sus elementos relacionados (etiquetas, imágenes, etc.).
+     * @param int $id El ID del post que se eliminará.
+     * @return void
+     * @throws \Exception Si ocurre algún error durante la eliminación.
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2024-04-30 00:04:56
+     */
     public function deletePostTrait($id)
     {
         $post = Post::find($id);
@@ -76,7 +84,14 @@ trait PostTrait {
     }
 
 
-
+    /**
+     * Descripción: Elimina un archivo del sistema de almacenamiento.
+     * @param string $file Ruta del archivo a eliminar.
+     * @param bool $pathStore (Opcional) Indica si la ruta incluye 'storage/' o no.
+     * @return void
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2024-04-30 00:04:56
+     */
     public function deleteFileTrait($file,$pathStore = true){
         // Asigna la ruta completa (con o sin 'storage/') según la opción $pathStore
         $fullPath = $pathStore ? 'storage/'.$file : $file;
@@ -87,6 +102,15 @@ trait PostTrait {
         }
     }
 
+    /**
+     * Descripción: Agrega un nuevo elemento a un array existente.
+     * @param array $existingArray El array existente al que se agregará el nuevo elemento.
+     * @param mixed $newItem El elemento que se agregará al array.
+     * @param bool $checkDuplicates (Opcional) Si se debe verificar la existencia de duplicados.
+     * @return array El array actualizado con el nuevo elemento (si no es duplicado).
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2024-04-30 00:04:56
+     */
     private function addItemToArray($existingArray,$newItem,$checkDuplicates = true){
         // Verifica si se deben verificar duplicados
         if ($checkDuplicates) {

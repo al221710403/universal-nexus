@@ -3,7 +3,6 @@
 namespace App\Models\Publish;
 
 use App\Models\User;
-// use App\Traits\TagTrait;
 use Spatie\Tags\HasTags;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +14,6 @@ class Post extends Model
 {
     use HasFactory;
     use HasTags;
-    // use TagTrait;
 
     /**
      * The attributes that aren't mass assignable.

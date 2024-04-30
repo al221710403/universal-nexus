@@ -3,6 +3,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Antic+Didone&family=Bebas+Neue&family=Berkshire+Swash&family=Caveat:wght@400..700&family=Cedarville+Cursive&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Comfortaa:wght@300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Italiana&family=La+Belle+Aurore&family=League+Script&family=Lobster&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat+Subrayada:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Georgian:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shadows+Into+Light+Two&display=swap');
     </style>
+    <link rel="stylesheet" href="{{ asset('css/ckeditor_base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ckeditor_create.css') }}">
 @endpush
 
@@ -144,7 +145,7 @@
             // Configurar un nuevo timeout para ejecutar la función después de 1 segundo
             autosaveTimeout = setTimeout(() => {
                 window.livewire.emit('autoSaveBlog');
-            }, 10000); // Espera 1 segundo después de que el usuario deje de escribir
+            }, 15000); // Espera 15 segundo después de que el usuario deje de escribir
 
         });
 
@@ -169,7 +170,7 @@
                     // Configurar un nuevo timeout para ejecutar la función después de 1 segundo
                     autosaveTimeout = setTimeout(() => {
                         window.livewire.emit('autoSaveBlog');
-                    }, 10000); // Espera 10 segundo después de que el usuario deje de escribir
+                    }, 15000); // Espera 15 segundo después de que el usuario deje de escribir
                 });
             })
             .catch( error => {

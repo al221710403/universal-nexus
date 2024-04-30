@@ -126,14 +126,14 @@ class PostController extends Component
 
         // Se manda a llamar a la función de extraer las imagenes del post y despúes
         // se almacenan en la base de datos
-        $images = $this->extractImage($this->body);
+        $images = $this->extractImageTrait($this->body);
         $this->addImage($images);
 
         // Obtiene la información actualizada del post
         $this->getPost();
 
         //Se elimina el archivo de AutoSave
-        $this->deleteFile('storage/' .$this->pathAutoSave.$this->fileAutoSave);
+        $this->deleteFileTrait($this->pathAutoSave.$this->fileAutoSave);
 
         $this->emit('noty-primary', 'Cambios guardados');
     }
@@ -272,22 +272,6 @@ class PostController extends Component
 
 
     /**
-     * title: Extrae las imagenes
-     * Descripción: Extrae las imagenes incrustadas en el post con regex
-     * @access public
-     * @param  string $data
-     * @return array $matches
-     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
-     * @date 2023-01-26 00:04:56
-     */
-    public function extractImage($data)
-    {
-        $re_extract_image = '/src=["\']([^ ^"^\']*)["\']/ims';
-        preg_match_all($re_extract_image, $data, $matches);
-        return $matches[1];
-    }
-
-    /**
      * title: Agrega las imagenes del post
      * Descripción: Agrega las imagenes que se insertan en el post a la base de datos
      * @access public
@@ -389,7 +373,7 @@ class PostController extends Component
      * @date 2024-04-30 00:13:16
      */
     public function autoSaveBlog(){
-        $this->deleteFile('storage/' . $this->pathAutoSave.$this->fileAutoSave);
+        $this->deleteFileTrait($this->pathAutoSave.$this->fileAutoSave);
 
         $dataJson = [
             'craeted_at' => Carbon::now()->format('d/m/Y H:i:s'),
@@ -428,29 +412,15 @@ class PostController extends Component
 
             // Se manda a llamar a la función de extraer las imagenes del post y despúes
             // se almacenan en la base de datos
-            $images = $this->extractImage($this->body);
+            $images = $this->extractImageTrait($this->body);
             $this->addImage($images);
 
             //Se elimina el archivo de AutoSave
-            $this->deleteFile('storage/' .$this->pathAutoSave.$this->fileAutoSave);
+            $this->deleteFileTrait($this->pathAutoSave.$this->fileAutoSave);
 
             return redirect()->route('publish.posts.edit', $this->post_id);
         }
-        $this->deleteFile('storage/' . $this->pathAutoSave.$this->fileAutoSave);
+        $this->deleteFileTrait($this->pathAutoSave.$this->fileAutoSave);
     }
 
-    /**
-     * title: Elimina archivos
-     * Descripción: Recibe la ruta de un archivo y lo elimina
-     * @access public
-     * @param string $file
-     * @return message
-     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
-     * @date 2023-01-26 00:03:25
-     */
-    public function deleteFile($file){
-        if (file_exists($file)) {
-            unlink($file); //si el archivo ya existe se borra
-        }
-    }
 }

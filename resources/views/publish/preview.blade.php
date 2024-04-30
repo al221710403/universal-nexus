@@ -11,6 +11,7 @@
     </style>
     <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ckeditor_view.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor_base.css') }}">
 @endsection
 
 @section('content')

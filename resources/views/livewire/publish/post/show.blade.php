@@ -3,6 +3,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
     </style>
     <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor_base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ckeditor_view.css') }}">
     <style>
         html {
