@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/posts/new', PostController::class)->name('publish.posts.store');
         Route::get('/posts/edit/{id}', PostController::class)->name('publish.posts.edit');
         Route::get('/posts/{post}', PosShowController::class)->name('publish.posts.show');
-        Route::get('/posts/preview/{post}', [PostFunctionController::class, 'preview'])->name('publish.posts.preview');
+        Route::get('/posts/preview/{post}/{action?}', [PostFunctionController::class, 'preview'])->name('publish.posts.preview');
 
 
         Route::post('image/upload', [ImageController::class, 'upload'])->name('publish.posts.image.uplodad');

@@ -122,7 +122,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex justify-end gap-4">
-                                <button onclick="Confirm('el artícluo','deleteMyPost',{{$post->id}})"
+                                <button onclick="Confirm('la publicación','deleteMyPost',{{$post->id}})"
                                     class="text-2xl hover:text-red-500" title="Eliminar">
                                     <i class='bx bxs-trash'></i>
                                 </button>

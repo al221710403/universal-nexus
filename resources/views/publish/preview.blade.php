@@ -18,7 +18,7 @@
     <div class="mb-2">
         <section class="flex justify-between p-4 bg-white rounded-lg shadow-lg">
             <h2 class="text-xl font-bold text-gray-700"> <span><i class='bx bxs-label'></i></span>
-                Preview
+                {{$dataJson["title"]}}
             </h2>
         </section>
     </div>

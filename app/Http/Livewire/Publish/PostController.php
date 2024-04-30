@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Publish;
 use Carbon\Carbon;
 use Spatie\Tags\Tag;
 use Livewire\Component;
-// use App\Models\Publish\Tag;
 use Illuminate\Support\Str;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
@@ -14,14 +13,16 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\PostTrait;
 
 class PostController extends Component
 {
     use WithFileUploads;
     use WithPagination;
+    use PostTrait;
 
     // modals
-    public $settings = false, $published_modal = false, $preview_modal = false, $labelAction = "New Post";
+    public $settings = false, $published_modal = false, $recovery_file = false, $labelAction = "New Post";
 
     // Variables utilizados en los tags
     public $tags, $old_tags, $all_tags, $old_images;
@@ -37,8 +38,13 @@ class PostController extends Component
         $publish_date,
         $post_public = true;
 
+    public $pathAutoSave = 'publish/post/autosave/',
+        $fileAutoSave,
+        $dataJson;
+
     protected $listeners =  [
-        'deletePost' => 'deletePost'
+        'deletePost' => 'deletePost',
+        'autoSaveBlog' => 'autoSaveBlog'
     ];
 
     public function mount($id = 0)
@@ -59,9 +65,18 @@ class PostController extends Component
             $this->post_id = $id;
         }
 
+        $this->fileAutoSave = 'file_autosave_'.$this->post_id.'.json';
+
+        // Si existe un archivo de recuperación
+        if (file_exists('storage/' . $this->pathAutoSave . $this->fileAutoSave)) {
+            $this->dataJson = json_decode(Storage::get($this->pathAutoSave . $this->fileAutoSave), true);
+            $this->recovery_file = true;
+        }
+
         $this->getPost();
 
         $this->all_tags = Tag::all('name')->pluck('name')->toArray();
+
     }
 
     public function render()
@@ -116,6 +131,9 @@ class PostController extends Component
 
         // Obtiene la información actualizada del post
         $this->getPost();
+
+        //Se elimina el archivo de AutoSave
+        $this->deleteFile('storage/' .$this->pathAutoSave.$this->fileAutoSave);
 
         $this->emit('noty-primary', 'Cambios guardados');
     }
@@ -194,45 +212,11 @@ class PostController extends Component
      */
     public function deletePost()
     {
-
-        DB::beginTransaction();
-        try {
-            $tags = $this->post->tags;
-
-            // Elimina los tags asociados al post
-            if ($tags->count() > 0) {
-                $this->post->detachTags($tags->pluck('name')->toArray());
-                // $this->post->tags()->detach($tags->pluck('id')->toArray());
-            }
-
-            // Elimina la imagen
-            if ($this->post->featured_image != 'noimg.png') {
-                if (file_exists('storage/' .  $this->post->featured_image)) {
-                    unlink('storage/' . $this->post->featured_image); //si el archivo ya existe se borra
-                }
-            }
-
-            // Eliminamos las imagenes del post
-            $images = $this->extractImage($this->body);
-            $path = 'publish/post/image/';
-            $deleteImage = [];
-
-            // Crea un nuevo array agregando el path completo a las imagenes
-            foreach ($images as $image) {
-                $image_url = $path . pathinfo($image, PATHINFO_BASENAME);
-                array_push($deleteImage, $image_url);
-            }
-            $this->deleteImage($deleteImage);
-
-            $this->post->delete();
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            $this->emit('noty-danger', 'Ups!! Hubo un error al eliminar el artículo');
-            return $e->getMessage();
+        if ($this->deletePostTrait($this->post_id)) {
+            return redirect()->route('publish.posts.index');
+        } else {
+            $this->emit('noty-danger', 'Ups!! Hubo un error al eliminar la publicación');
         }
-
-        return redirect()->route('publish.posts.index');
     }
 
 
@@ -389,6 +373,84 @@ class PostController extends Component
             return $slug . '-' . $max;
         } else {
             return $slug;
+        }
+    }
+
+
+    //==================================================
+
+    //==================================================
+
+    /**
+     * title: Auto Save
+     * Descripción: Genera un archivo de recuperación de contenido
+     * @access public
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2024-04-30 00:13:16
+     */
+    public function autoSaveBlog(){
+        $this->deleteFile('storage/' . $this->pathAutoSave.$this->fileAutoSave);
+
+        $dataJson = [
+            'craeted_at' => Carbon::now()->format('d/m/Y H:i:s'),
+            'blog_title' => $this->title,
+            'blog_content' => $this->body
+        ];
+
+        Storage::put($this->pathAutoSave.$this->fileAutoSave, json_encode($dataJson));
+        // $this->emit('noty-primary', 'Cambios guardados');
+    }
+
+    /**
+     * title: Auto Save Delete or Save
+     * Descripción: Deside si el archivo de recuperación se guarada o se elimina
+     * @access public
+     * @param string $action
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2024-04-30 00:13:16
+     */
+    public function autoSaveDeleteOrSave($action = 'save'){
+        if ($action == 'save') {
+            $this->title = $this->dataJson['blog_title'];
+            $this->body = $this->dataJson['blog_content'];
+
+            // Se actualiza el contenido del post
+            $this->post->update([
+                "title" => $this->title,
+                "body" => $this->body
+            ]);
+
+            // Se actualiza el slug
+            if (strlen($this->title) > 0) {
+                $this->post->slug = $this->createSlug();
+                $this->post->save();
+            }
+
+            // Se manda a llamar a la función de extraer las imagenes del post y despúes
+            // se almacenan en la base de datos
+            $images = $this->extractImage($this->body);
+            $this->addImage($images);
+
+            //Se elimina el archivo de AutoSave
+            $this->deleteFile('storage/' .$this->pathAutoSave.$this->fileAutoSave);
+
+            return redirect()->route('publish.posts.edit', $this->post_id);
+        }
+        $this->deleteFile('storage/' . $this->pathAutoSave.$this->fileAutoSave);
+    }
+
+    /**
+     * title: Elimina archivos
+     * Descripción: Recibe la ruta de un archivo y lo elimina
+     * @access public
+     * @param string $file
+     * @return message
+     * @author Cristian Milton Fidel Pascual <al221710403@gmail.com>
+     * @date 2023-01-26 00:03:25
+     */
+    public function deleteFile($file){
+        if (file_exists($file)) {
+            unlink($file); //si el archivo ya existe se borra
         }
     }
 }

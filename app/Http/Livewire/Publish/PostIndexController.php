@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Publish;
 
-// use Carbon\Carbon;
 use App\Models\User;
 use Spatie\Tags\Tag;
 use Livewire\Component;
+use App\Traits\PostTrait;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
 use App\Models\Publish\Image;
@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class PostIndexController extends Component
 {
     use WithPagination;
+    use PostTrait;
 
     // Variables utilizadas en el index
     public $search, $column, $order, $pagination, $authors_select, $author_id, $tags_select, $tags = [], $filters = false, $my_posts = false;
@@ -89,44 +90,10 @@ class PostIndexController extends Component
      */
     public function deleteMyPost($id)
     {
-        $post = Post::find($id);
-        $tags = $post->tags;
-
-        DB::beginTransaction();
-        try {
-            // Elimina los tags asociados al post
-            if ($tags->count() > 0) {
-                $post->detachTags($tags->pluck('name')->toArray());
-                // $post->tags()->detach($tags->pluck('id')->toArray());
-            }
-
-            // Elimina la imagen
-            if ($post->featured_image != 'noimg.png') {
-                if (file_exists('storage/' .  $post->featured_image)) {
-                    unlink('storage/' . $post->featured_image); //si el archivo ya existe se borra
-                }
-            }
-
-            // Eliminamos las imagenes del post
-            $images = $this->extractImage($post->body);
-            $path = 'publish/post/image/';
-            $deleteImage = [];
-
-            // Crea un nuevo array agregando el path completo a las imagenes
-            foreach ($images as $image) {
-                $image_url = $path . pathinfo($image, PATHINFO_BASENAME);
-                array_push($deleteImage, $image_url);
-            }
-            $this->deleteImage($deleteImage);
-
-            $post->delete();
-
-            DB::commit();
-            $this->emit('noty-primary', 'El post se elimino correctamente');
-        } catch (\Exception $e) {
-            DB::rollback();
-            $this->emit('noty-danger', 'Ups!! Hubo un error al eliminar el post');
-            return $e->getMessage();
+        if ($this->deletePostTrait($id)) {
+            $this->emit('noty-primary', 'La publicación se elimino correctamente');
+        } else {
+            $this->emit('noty-danger', 'Ups!! Hubo un error al eliminar la publicación');
         }
     }
 

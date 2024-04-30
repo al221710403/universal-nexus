@@ -59,7 +59,7 @@
 
         @include('livewire.publish.post.parts.modal-settings')
         @include('livewire.publish.post.parts.modal-published')
-        @include('livewire.publish.post.parts.modal-preview')
+        @include('livewire.publish.post.parts.modal-recovery-file')
 
     </div>
 
@@ -74,7 +74,7 @@
             </p>
             <form action="">
                 <div>
-                    <input type="text" wire:model="title" placeholder="New Title"
+                    <input id="title" type="text" wire:model="title" placeholder="New Title"
                         class="w-full border-0 text-5xl font-semibold text-gray-800 leading-tight text-center">
                     <x-jet-input-error for="title" />
                 </div>
@@ -134,6 +134,20 @@
 
 
     <script>
+        const inputTitle = document.getElementById('title');
+        let autosaveTimeout; // Variable para almacenar el ID del timeout
+
+        inputTitle.addEventListener('input', () => {
+            // Cancelar el timeout anterior (si existe)
+            clearTimeout(autosaveTimeout);
+
+            // Configurar un nuevo timeout para ejecutar la función después de 1 segundo
+            autosaveTimeout = setTimeout(() => {
+                window.livewire.emit('autoSaveBlog');
+            }, 10000); // Espera 1 segundo después de que el usuario deje de escribir
+
+        });
+
         ClassicEditor
             .create( document.querySelector( '#editor' ),{
                 mediaEmbed: {
@@ -148,7 +162,15 @@
             .then( function(editor){
                 editor.model.document.on( 'change:data', () => {
                     @this.set('body',editor.getData());
-                })
+
+                    // Cancelar el timeout anterior (si existe)
+                    clearTimeout(autosaveTimeout);
+
+                    // Configurar un nuevo timeout para ejecutar la función después de 1 segundo
+                    autosaveTimeout = setTimeout(() => {
+                        window.livewire.emit('autoSaveBlog');
+                    }, 10000); // Espera 10 segundo después de que el usuario deje de escribir
+                });
             })
             .catch( error => {
                 console.error( error );
