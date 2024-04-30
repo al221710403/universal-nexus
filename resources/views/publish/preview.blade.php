@@ -1,20 +1,31 @@
-@push('styles')
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-    </style>
-    <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ckeditor_view.css') }}">
+@extends('layouts.empty')
+
+@section('styles')
     <style>
         html {
             scroll-behavior: smooth;
         }
     </style>
-@endpush
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+    </style>
+    <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor_view.css') }}">
+@endsection
 
+@section('content')
 <div class="container mx-auto py-4 mb-4">
+    <div class="mb-2">
+        <section class="flex justify-between p-4 bg-white rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold text-gray-700"> <span><i class='bx bxs-label'></i></span>
+                Preview
+            </h2>
+        </section>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+        {{--  Seccion del Post  --}}
         <article class="lg:col-span-2 bg-white rounded-md shadow-lg p-3 relative">
             {{--  Sección de Tags  --}}
             @if ($post->tags->count() > 0)
@@ -27,6 +38,7 @@
                 </section>
                 <hr class="mt-1 md:mb-2" />
             @endif
+
             {{--  Span que muestra si el post es público o privado esto solo si eres el dueño del post  --}}
             @if ( Auth::user()->id == $post->author->id )
                 <span class="absolute z-20 top-0 right-0  bg-gray-400 text-white px-2 py-1">
@@ -34,6 +46,7 @@
                 </span>
             @endif
 
+            {{--  Muestra el titulo dependiendo si tiene imagen o no  --}}
             @if ($post->featured_image != 'noimg.png')
                 <div class="mb-4 md:mb-0 w-full mx-auto relative h-80 text-base">
                     <div class="absolute left-0 bottom-0 w-full h-full z-10"
@@ -81,6 +94,7 @@
                 </div>
             @endif
 
+            {{--  Contenido del Post  --}}
             <div class="ck-editor__main">
                 <div class="ck-content mt-2">
                     {!!$post->body!!}
@@ -88,53 +102,23 @@
             </div>
         </article>
 
-        {{-- Articulos similares --}}
+        {{-- Tabla de contenido --}}
         <aside class="relative">
             <section class="bg-white rounded-md shadow-lg py-4 px-5 sticky top-1" id="containerTableOfContents">
                 <h2 class="text-xl font-semibold text-gray-700">Tabla de Contenido</h2>
                 <div id="tableOfContents">
                 </div>
-            </section>
 
-             {{-- Articulos similares --}}
-            <section id="otherPosts">
-                <h2 class="text-xl font-semibold text-gray-600 mb-4">
-                    Artículos similares
-                </h2>
+                <p class="text-red-700 text-sm leading-6 mt-2" id="notify">No ahí titulos para generar una tabla de contenidos.</p>
 
-                <ul>
-                    @forelse ($similares as $item)
-                        <li class="mb-4 h-32 overflow-hidden bg-white shadow-lg">
-                            <a href="{{ route('publish.posts.show', $item->slug) }}" class="flex" title="{{$item->title}}">
-                                <img class="w-36 h-32 object-cover object-center" src="{{Storage::url($item->featured_image)}}"
-                                    alt="portada: {{$item->title}}">
-                                <div class="flex-1 ml-2 flex flex-col overflow-hidden py-1">
-                                    <h3 class="block mb-1 text-gray-700 font-semibold text-base truncate">
-                                        {{-- {{Str::limit($item->title,
-                                        30)}} --}}
-                                        {{$item->title}}
-                                    </h3>
-                                    <p class="text-clip max-w-full max-h-32 text-sm flex-1 flex-wrap">
-                                        {{$item->featured_image_caption}}
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                    @empty
-                        <li>
-                            No ahí artículos similares
-                        </li>
-                    @endforelse
-                </ul>
             </section>
         </aside>
-
     </div>
-
 </div>
 
+@endsection
 
-@push('scripts')
+@section('scripts')
     <script src="{{ asset('vendor/prism/prism.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -180,8 +164,19 @@
             const titles = divContent.querySelectorAll('h2, h3, h4, h5');
 
             if(titles.length > 0) {
-                const otherPosts = document.getElementById('otherPosts');
-                otherPosts.classList.add('mt-5');
+                // Obtener el elemento por su ID
+                const notify = document.getElementById('notify');
+
+                // Verificar si se encontró el elemento
+                if (notify) {
+                    // Obtener el padre del elemento a eliminar
+                    const padreElemento = notify.parentNode;
+
+                    // Eliminar el elemento del DOM
+                    padreElemento.removeChild(notify);
+                } else {
+                    console.error('No se pudo encontrar el elemento con el ID especificado.');
+                }
 
                 //Crea el elemento de lista ul y agrega los estilos y asigna un ID
                 const tableOfContents = document.createElement('ul');
@@ -221,24 +216,7 @@
                 const tocContainer = document.getElementById('tableOfContents');
 
                 tocContainer.appendChild(tableOfContents);
-            }else{
-                // Obtener el elemento por su ID
-                const elementoEliminar = document.getElementById('containerTableOfContents'); // Reemplaza 'tu-id-a-eliminar' con el ID del elemento que deseas eliminar
-
-                // Verificar si se encontró el elemento
-                if (elementoEliminar) {
-                    // Obtener el padre del elemento a eliminar
-                    const padreElemento = elementoEliminar.parentNode;
-
-                    // Eliminar el elemento del DOM
-                    padreElemento.removeChild(elementoEliminar);
-                } else {
-                    console.error('No se pudo encontrar el elemento con el ID especificado.');
-                }
             }
-
-            //console.log(titles);
-            //console.log(titles.length);
         });
     </script>
 
@@ -267,4 +245,4 @@
             }
         });
     </script>
-@endpush
+@endsection

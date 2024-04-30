@@ -1,22 +1,9 @@
 @push('styles')
-<style>
-    .ck-content p>span {
-        display: inline-block !important;
-        float: left !important;
-        padding-right: 0.75rem !important;
-        max-width: 100% !important;
-        min-width: 50% !important;
-    }
-
-    .ck-content p>span>img {
-        height: 18rem !important;
-        width: 100% !important;
-    }
-</style>
-<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Antic+Didone&family=Bebas+Neue&family=Berkshire+Swash&family=Caveat:wght@400..700&family=Cedarville+Cursive&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Comfortaa:wght@300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Italiana&family=La+Belle+Aurore&family=League+Script&family=Lobster&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat+Subrayada:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Georgian:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shadows+Into+Light+Two&display=swap');
-</style>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Antic+Didone&family=Bebas+Neue&family=Berkshire+Swash&family=Caveat:wght@400..700&family=Cedarville+Cursive&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Comfortaa:wght@300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Italiana&family=La+Belle+Aurore&family=League+Script&family=Lobster&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat+Subrayada:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Georgian:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shadows+Into+Light+Two&display=swap');
+    </style>
+    <link rel="stylesheet" href="{{ asset('css/ckeditor_create.css') }}">
 @endpush
 
 
@@ -42,12 +29,12 @@
                         <i class='bx bxs-save'></i>
                     </button>
                 </li>
-                {{-- <li class="mr-3">
-                    <button wire:click="$set('preview_modal', true)" class="btn-mdl hover:text-indigo-700"
-                        title="Vista previa" data-action="open">
+                <li class="mr-3">
+                    <a href="{{ route('publish.posts.preview', $post_id ) }}" class="btn-mdl hover:text-indigo-700"
+                        title="Vista previa" target="_blank">
                         <i class='bx bxs-low-vision'></i>
-                    </button>
-                </li> --}}
+                    </a>
+                </li>
 
                 <li class="mr-3">
                     <a href="{{ route('publish.posts.index') }}" class=" hover:text-indigo-700" title="Regresar">
@@ -88,7 +75,7 @@
             <form action="">
                 <div>
                     <input type="text" wire:model="title" placeholder="New Title"
-                        class="w-full border-0 text-3xl font-sans font-semibold text-gray-800">
+                        class="w-full border-0 text-5xl font-semibold text-gray-800 leading-tight text-center">
                     <x-jet-input-error for="title" />
                 </div>
 
@@ -140,94 +127,94 @@
 
 
 @push('scripts')
-<script src="{{ asset('vendor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
-<script src="{{ asset('vendor/prism/prism.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <script src="{{ asset('vendor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+    <script src="{{ asset('vendor/prism/prism.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 
 
-<script>
-    ClassicEditor
-        .create( document.querySelector( '#editor' ),{
-            mediaEmbed: {
-                previewsInData:true
-            },
-            simpleUpload: {
-                // The URL that the images are uploaded to.
-                uploadUrl: "{{ route('publish.posts.image.uplodad') }}",
-            },
-            placeholder: 'My custom placeholder for the body'
-        } )
-        .then( function(editor){
-            editor.model.document.on( 'change:data', () => {
-                @this.set('body',editor.getData());
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ),{
+                mediaEmbed: {
+                    previewsInData:true
+                },
+                simpleUpload: {
+                    // The URL that the images are uploaded to.
+                    uploadUrl: "{{ route('publish.posts.image.uplodad') }}",
+                },
+                placeholder: 'My custom placeholder for the body'
+            } )
+            .then( function(editor){
+                editor.model.document.on( 'change:data', () => {
+                    @this.set('body',editor.getData());
+                })
             })
-        })
-        .catch( error => {
-            console.error( error );
-        } );
+            .catch( error => {
+                console.error( error );
+            } );
 
-</script>
+    </script>
 
 
-<script>
-    // The DOM element you wish to replace with Tagify
-    var input = document.querySelector('input[name=tags]');
-    var tagify = new Tagify(input, {
-      addTagOnBlur: false,
-      dropdown: {
-        enabled: 0,
-        closeOnSelect: false,
-      },
-      whitelist:@json($all_tags),
-      templates: {
-        dropdownItem(item) {
-            return `<div ${this.getAttributes(item)}
-            class='tagify__dropdown__item ${item.class ? item.class : ''}'
-            tabindex="0"
-            role="option">
-                ${item.value}
-            </div>`;
+    <script>
+        // The DOM element you wish to replace with Tagify
+        var input = document.querySelector('input[name=tags]');
+        var tagify = new Tagify(input, {
+        addTagOnBlur: false,
+        dropdown: {
+            enabled: 0,
+            closeOnSelect: false,
         },
-      },
-      hooks: {
-        suggestionClick(e) {
-          var isAction = e.target.classList.contains('removeBtn'),
-            suggestionElm = e.target.closest('.tagify__dropdown__item'),
-            value = suggestionElm.getAttribute('value');
-
-          return new Promise(function (resolve, reject) {
-            if (isAction) {
-              removeWhitelistItem(value);
-              tagify.dropdown.refilter.call(tagify);
-              reject();
-            }
-            resolve();
-          });
+        whitelist:@json($all_tags),
+        templates: {
+            dropdownItem(item) {
+                return `<div ${this.getAttributes(item)}
+                class='tagify__dropdown__item ${item.class ? item.class : ''}'
+                tabindex="0"
+                role="option">
+                    ${item.value}
+                </div>`;
+            },
         },
-      },
-    });
+        hooks: {
+            suggestionClick(e) {
+            var isAction = e.target.classList.contains('removeBtn'),
+                suggestionElm = e.target.closest('.tagify__dropdown__item'),
+                value = suggestionElm.getAttribute('value');
 
-    tagify.addTags(@json($old_tags));
-
-    tagify
-    .on('change', (e) => {
-        let parts = JSON.parse(e.detail.value);
-        let tags = [];
-
-        parts.forEach(function(item) {
-            //console.log(item.value);
-            tags.push(item.value);
+            return new Promise(function (resolve, reject) {
+                if (isAction) {
+                removeWhitelistItem(value);
+                tagify.dropdown.refilter.call(tagify);
+                reject();
+                }
+                resolve();
+            });
+            },
+        },
         });
-        console.log(tags);
 
-        @this.set('tags',tags);
-    })
+        tagify.addTags(@json($old_tags));
 
-    function removeWhitelistItem(value) {
-      var index = tagify.settings.whitelist.indexOf(value);
-      if (value && index > -1) tagify.settings.whitelist.splice(index, 1);
-    }
-</script>
+        tagify
+        .on('change', (e) => {
+            let parts = JSON.parse(e.detail.value);
+            let tags = [];
+
+            parts.forEach(function(item) {
+                //console.log(item.value);
+                tags.push(item.value);
+            });
+            console.log(tags);
+
+            @this.set('tags',tags);
+        })
+
+        function removeWhitelistItem(value) {
+        var index = tagify.settings.whitelist.indexOf(value);
+        if (value && index > -1) tagify.settings.whitelist.splice(index, 1);
+        }
+    </script>
 
 @endpush

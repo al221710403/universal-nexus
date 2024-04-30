@@ -9,12 +9,12 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-white-background.svg')}}" />
     @include('layouts.app.styles')
+    @yield('styles')
 </head>
 
 <body class="body-mdl font-sans antialiased min-h-screen max-h-full bg-gray-100 relative">
 
     <div class="min-h-screen" id="main">
-        @livewire('navigation-menu')
 
         <!-- Page Content -->
         <main class="flex">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            {{ $slot }}
+            @yield('content')
 
         </main>
     </div>
@@ -35,6 +35,7 @@
     @stack('modals')
 
     @include('layouts.app.scripts')
+    @yield('scripts')
 </body>
 
 </html>

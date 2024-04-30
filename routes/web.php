@@ -7,6 +7,7 @@ use App\Http\Livewire\Publish\PostController;
 use App\Http\Livewire\ToDo\TaskIndexController;
 use App\Http\Livewire\Publish\PosShowController;
 use App\Http\Controllers\PredefinedFileController;
+use App\Http\Controllers\Publish\PostFunctionController;
 use App\Http\Livewire\Publish\PostIndexController;
 
 /*
@@ -44,7 +45,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/posts', PostIndexController::class)->name('publish.posts.index');
         Route::get('/posts/new', PostController::class)->name('publish.posts.store');
         Route::get('/posts/edit/{id}', PostController::class)->name('publish.posts.edit');
-        Route::get('/posts/show/{post}', PosShowController::class)->name('publish.posts.show');
+        Route::get('/posts/{post}', PosShowController::class)->name('publish.posts.show');
+        Route::get('/posts/preview/{post}', [PostFunctionController::class, 'preview'])->name('publish.posts.preview');
+
+
         Route::post('image/upload', [ImageController::class, 'upload'])->name('publish.posts.image.uplodad');
     });
 
