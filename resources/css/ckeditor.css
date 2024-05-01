@@ -37,14 +37,10 @@
     @apply items-center bg-transparent w-full border-collapse ;
 }
 
-.ck-content figure{
-    @apply mb-3 pb-2;
+.ck-content figure.table {
+    display: flex !important;
+    justify-content: center !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
 }
-/*
-.ck-content figure{
-    @apply w-9/12 mx-auto h-80 mb-3;
-} */
-
-/* .ck-content oembed{
-    @apply w-full h-full;
-} */
