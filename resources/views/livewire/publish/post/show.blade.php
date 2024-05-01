@@ -91,7 +91,7 @@
 
         {{-- Articulos similares --}}
         <aside class="relative">
-            <section class="bg-white rounded-md shadow-lg py-4 px-5 sticky top-1" id="containerTableOfContents">
+            <section class="bg-white rounded-md shadow-lg py-4 px-5 sticky top-1 z-10" id="containerTableOfContents">
                 <h2 class="text-xl font-semibold text-gray-700">Tabla de Contenido</h2>
                 <div id="tableOfContents">
                 </div>
