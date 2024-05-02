@@ -10,6 +10,24 @@
             scroll-behavior: smooth;
         }
     </style>
+    <style>
+        .ck-content ul,
+        .ck-content ol{
+            --tw-text-opacity: 1;
+            color: rgb(82 82 82 / var(--tw-text-opacity));
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px !important;
+            unicode-bidi: isolate;
+            list-style-type: initial;
+        }
+
+        .ck-content ol{
+            list-style-type: decimal;
+        }
+    </style>
 @endpush
 
 <div class="container mx-auto py-4 mb-4">

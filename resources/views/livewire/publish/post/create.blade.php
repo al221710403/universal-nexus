@@ -5,6 +5,20 @@
     </style>
     <link rel="stylesheet" href="{{ asset('css/ckeditor_base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ckeditor_create.css') }}">
+
+    <style>
+        .ck-content ul,
+        .ck-content ol{
+            --tw-text-opacity: 1;
+            color: rgb(82 82 82 / var(--tw-text-opacity));
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px !important;
+            unicode-bidi: isolate;
+        }
+    </style>
 @endpush
 
 
