@@ -3,8 +3,9 @@
 namespace App\Models\Publish;
 
 use App\Models\User;
-use Spatie\Tags\HasTags;
 use DateTimeInterface;
+use Spatie\Tags\HasTags;
+use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,8 @@ class Post extends Model
 {
     use HasFactory;
     use HasTags;
+    use Searchable;
+
 
     /**
      * The attributes that aren't mass assignable.
@@ -211,5 +214,41 @@ class Post extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'body' => $this->body,
+            'metadata' => $this->metadata,
+        ];
+    }
+
+
+    /**
+     * Get the indexable name for the model.
+     *
+     * @return array
+     */
+    public function searchableAs(){
+        return 'posts_index';
+    }
+
+
+    /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable()
+    {
+        return $this->public === true;
     }
 }

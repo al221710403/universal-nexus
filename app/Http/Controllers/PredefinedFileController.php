@@ -13,7 +13,7 @@ class PredefinedFileController extends Controller
     use FileTrait;
     private $img_ext = ['jpg', 'png', 'jpge', 'gif', 'JPG', 'PNG', 'JPGE', 'GIF'];
     private $video_ext = ['mp4', 'avi', 'mpge', 'MP4', 'AVI', 'MPGE'];
-    private $document_ext = ['doc', 'docx', 'pdf', 'DOC', 'DOCX', 'PDF'];
+    private $document_ext_controller = ['doc', 'docx', 'pdf', 'DOC', 'DOCX', 'PDF'];
 
     private $path = "default_files";
 
@@ -28,7 +28,7 @@ class PredefinedFileController extends Controller
             return "video";
         }
 
-        if (in_array($ext, $this->document_ext)) {
+        if (in_array($ext, $this->document_ext_controller)) {
             return "document";
         }
     }
@@ -38,7 +38,7 @@ class PredefinedFileController extends Controller
         return array_merge(
             $this->img_ext,
             $this->video_ext,
-            $this->document_ext
+            $this->document_ext_controller
         );
     }
     /**

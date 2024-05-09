@@ -4,16 +4,20 @@
 <div class="container mx-auto mt-2 pb-4">
 
     {{-- Header - buscador y botones --}}
-    <div class="my-3 p-2 bg-white rounded-lg shadow-lg flex flex-col lg:flex-row-reverse lg:justify-between relative">
+    <div class="sticky top-0 z-30 my-3 p-2 bg-white rounded-lg shadow-lg flex flex-col lg:flex-row-reverse lg:justify-between">
         <div class="block mb-2 lg:w-4/12 lg:inline-block lg:mb-0 relative">
             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                 <span class="w-5 h-5 text-gray-500">
                     <i class='bx bx-search'></i>
                 </span>
             </div>
-            <input type="text" wire:model="search"
+            {{--  <input type="text" wire:model="search"
                 class="my-auto block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-gray-500 focus:border-gray-500"
-                placeholder="Buscar artículo">
+                placeholder="Buscar artículo">  --}}
+
+            {{-- Buscador --}}
+            <x-post.modal-search />
+            {{--  <x-modal-search wire:model='open' :busqueda="$search" :results="$this->results" />  --}}
         </div>
 
         <div class="flex flex-col lg:flex-row rounded-md shadow-sm font-semibold">
@@ -110,7 +114,7 @@
                 <div class="flex flex-wrap">
                     @foreach ($post->tags as $tag)
                     <span wire:click="getTags({{$tag->id}})"
-                        class="cursor-pointer px-2 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-1 mr-1 rounded-lg">
+                        class="cursor-pointer px-2 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-1 mr-1 rounded-lg text-xs">
                         # {{$tag->name}}
                     </span>
                     @endforeach

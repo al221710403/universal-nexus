@@ -59,13 +59,27 @@ class PostIndexController extends Component
 
         // Buscador del index
         if (strlen($this->search) > 0) {
-            $posts = Post::where('title', 'like', '%' . $this->search . '%')
+            // $posts = Post::where('title', 'like', '%' . $this->search . '%')
+            //     ->tagsSearch($this->tags)
+            //     ->authorSearch($this->author_id)
+            //     ->live()
+            //     ->public()
+            //     ->orderBy($this->column, $this->order)
+            //     ->paginate($this->pagination);
+
+            $posts = Post::search( $this->search)
                 ->tagsSearch($this->tags)
                 ->authorSearch($this->author_id)
                 ->live()
                 ->public()
                 ->orderBy($this->column, $this->order)
                 ->paginate($this->pagination);
+
+            // $posts = Post::search( $this->search)
+            // ->orderBy($this->column, $this->order)
+            // ->paginate($this->pagination);
+            dd($posts);
+
         } else {
             $posts = Post::tagsSearch($this->tags)
                 ->authorSearch($this->author_id)
