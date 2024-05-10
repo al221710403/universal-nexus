@@ -1,4 +1,18 @@
 @push('styles')
+<style>
+    .search-term{
+        text-decoration-line: underline;
+        --tw-text-opacity: 1;
+        color: rgb(59 130 246 / var(--tw-text-opacity));
+        text-underline-offset: 3px;
+    }
+
+    .search-content:hover .search-term {
+        color: white;
+        font-weight: 600;
+        text-decoration-thickness: 2px;
+    }
+</style>
 @endpush
 
 <div class="container mx-auto mt-2 pb-4">
@@ -16,8 +30,7 @@
                 placeholder="Buscar artículo">  --}}
 
             {{-- Buscador --}}
-            <x-post.modal-search />
-            {{--  <x-modal-search wire:model='open' :busqueda="$search" :results="$this->results" />  --}}
+            <x-post.modal-search wire:model='search_post' :busqueda="$search" :results="$this->results"/>
         </div>
 
         <div class="flex flex-col lg:flex-row rounded-md shadow-sm font-semibold">

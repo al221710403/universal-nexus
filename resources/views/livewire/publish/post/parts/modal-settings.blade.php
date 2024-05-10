@@ -15,7 +15,7 @@
                 @error('featured_image') <span class="text-red-500 text-sm">{{ $message}}</span>@enderror
             </div>
 
-            <div class="relative z-0 mb-6 w-full group">
+            {{--  <div class="relative z-0 mb-6 w-full group">
                 <textarea wire:model.defer="featured_image_caption" id="featured_image_caption"
                     name="featured_image_caption" rows="2"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -24,10 +24,9 @@
                     class="peer-focus:font-medium absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Descripción
                     del post</label>
                 @error('featured_image_caption') <span class="text-red-500 text-sm">{{ $message}}</span>@enderror
-            </div>
+            </div>  --}}
 
             <div class="grid md:grid-cols-2 md:gap-6">
-
                 <div class="relative z-0 mb-6 w-full group">
                     <input wire:model.defer="publish_date" type="datetime-local" name="publish_date" id="publish_date"
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -49,6 +48,28 @@
                 <label for="tags" class="text-sm text-gray-500 block mb-2">Tags del post</label>
                 <input type="text" name="tags"
                     class="capitalize block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+            </div>
+
+            <div class="mb-6 w-full">
+                <label for="tags" class="text-sm text-gray-500 block mb-2">Palabras clave.</label>
+                {{--  question  --}}
+                {{--  <div class="relative">
+                    <span class="top-3 left-0 absolute text-gray-400"><i class='bx bxs-message-add'></i></span>
+
+                    <input wire:model.defer="new_keyword"
+                    class="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder="Nueva palabra clave" autocomplete="off">
+                </div>  --}}
+
+                <form class="relative" wire:submit.prevent="AddKeyword">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-1 text-gray-300 z-10">
+                        <i class='bx bxs-message-add'></i>
+                    </span>
+                    <input type="text" wire:model.defer="new_keyword"
+                    class="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder="Nueva palabra clave" autocomplete="off">
+                    <button class="hidden" type="submit">Save</button>
+                </form>
             </div>
         </div>
     </x-slot>

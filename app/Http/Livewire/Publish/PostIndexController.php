@@ -6,9 +6,11 @@ use App\Models\User;
 use Spatie\Tags\Tag;
 use Livewire\Component;
 use App\Traits\PostTrait;
+use Illuminate\Support\Str;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
 use App\Models\Publish\Image;
+use TeamTNT\TNTSearch\TNTSearch;
 use Illuminate\Support\Facades\DB;
 
 class PostIndexController extends Component
@@ -17,7 +19,7 @@ class PostIndexController extends Component
     use PostTrait;
 
     // Variables utilizadas en el index
-    public $search, $column, $order, $pagination, $authors_select, $author_id, $tags_select, $tags = [], $filters = false, $my_posts = false;
+    public $search, $column, $order, $pagination, $authors_select, $author_id, $tags_select, $tags = [], $filters = false, $my_posts = false, $search_post = false;
 
     // Variables utilizadas en el modal de mis post
     public $searchMyPost, $my_column, $my_order, $my_pagination, $status;
@@ -57,40 +59,30 @@ class PostIndexController extends Component
                 ->paginate($this->my_pagination);
         }
 
-        // Buscador del index
-        if (strlen($this->search) > 0) {
-            // $posts = Post::where('title', 'like', '%' . $this->search . '%')
-            //     ->tagsSearch($this->tags)
-            //     ->authorSearch($this->author_id)
-            //     ->live()
-            //     ->public()
-            //     ->orderBy($this->column, $this->order)
-            //     ->paginate($this->pagination);
-
-            $posts = Post::search( $this->search)
-                ->tagsSearch($this->tags)
-                ->authorSearch($this->author_id)
-                ->live()
-                ->public()
-                ->orderBy($this->column, $this->order)
-                ->paginate($this->pagination);
-
-            // $posts = Post::search( $this->search)
-            // ->orderBy($this->column, $this->order)
-            // ->paginate($this->pagination);
-            dd($posts);
-
-        } else {
-            $posts = Post::tagsSearch($this->tags)
-                ->authorSearch($this->author_id)
-                ->live()
-                ->public()
-                ->orderBy($this->column, $this->order)
-                ->paginate($this->pagination);
-        }
-
+        $posts = Post::tagsSearch($this->tags)
+            ->authorSearch($this->author_id)
+            ->live()
+            ->public()
+            ->orderBy($this->column, $this->order)
+            ->paginate($this->pagination);
 
         return view('livewire.publish.post.index', compact("posts", "all_post"));
+    }
+
+
+    public function getResultsProperty(){
+        $posts = Post::search( $this->search)
+        ->orderBy('title', 'asc')
+        ->paginate(5);
+        $tnt = new TNTSearch;
+        $se = $this->search;
+
+        return $posts->map(function($post) use ($se, $tnt) {
+            $post->title = $tnt->highlight($post->title, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
+            $post->body = $tnt->highlight($post->body, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
+            $post->metadata = $tnt->highlight($post->metadata, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
+            return $post; // Asegúrate de devolver el objeto $post después de aplicar la transformación
+        });
     }
 
     /**

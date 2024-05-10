@@ -22,10 +22,12 @@ class PostController extends Component
     use PostTrait;
 
     // modals
-    public $settings = false, $published_modal = false, $recovery_file = false, $labelAction = "New Post";
+    public $settings = true, $published_modal = false, $recovery_file = false, $labelAction = "New Post";
 
     // Variables utilizados en los tags
     public $tags, $old_tags, $all_tags, $old_images;
+
+    public $keywords ,$new_keyword;
 
     // Varibles del post
     public $post,
@@ -245,6 +247,9 @@ class PostController extends Component
         $this->old_tags = $this->post->tags->pluck('name')->toArray();
         $this->all_tags = Tag::all('name')->pluck('name')->toArray();
         $this->old_images = $this->post->images->pluck('image_url')->toArray();
+
+        // Obtener el campo JSON existente y decodificarlo como un array asociativo
+        $this->keywords = json_decode($this->post->metadata, true);
     }
 
     //==================================================
@@ -421,6 +426,16 @@ class PostController extends Component
             return redirect()->route('publish.posts.edit', $this->post_id);
         }
         $this->deleteFileTrait($this->pathAutoSave.$this->fileAutoSave);
+    }
+
+
+
+    public function AddKeyword(){
+        if($this->new_keyword){
+            dd($this->new_keyword);
+        }else{
+            dd('No ahi nada');
+        }
     }
 
 }
