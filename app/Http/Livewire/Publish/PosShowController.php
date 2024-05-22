@@ -7,7 +7,7 @@ use App\Models\Publish\Post;
 
 class PosShowController extends Component
 {
-    public $post;
+    public $post,$keywords;
 
     public function mount($post)
     {
@@ -16,6 +16,9 @@ class PosShowController extends Component
     public function render()
     {
         $tags = $this->post->tags;
+
+        $data_json = json_decode($this->post->metadata, true);
+        $this->keywords = $data_json["keywords"] ?? [];
 
         if ($tags->count() > 0) {
             $similares = Post::where('id', '!=', $this->post->id)

@@ -30,6 +30,10 @@ class PostFunctionController extends Controller
                 return redirect()->route('publish.posts.index');
             }
         }
-        return view('publish.preview',compact('post','dataJson'));
+
+        $data_json = json_decode($post->metadata, true);
+        $keywords = $data_json["keywords"] ?? [];
+
+        return view('publish.preview',compact('post','dataJson','keywords'));
     }
 }

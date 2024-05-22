@@ -1,0 +1,82 @@
+.ck-content h2::before {
+    content: ""; /* Contenido inicial vacío */
+    color: rgb(59, 130, 246);
+    transition: transform 0.8s ease; /* Transición suave */
+    display: inline-block; /* Para que ocupe espacio en línea */
+}
+
+.ck-content h2:hover::before {
+    content: "# "; /* Mostrar el símbolo # al pasar el mouse */
+    transform: translateX(-5px); /* Desplazamiento suave hacia la izquierda */
+}
+
+.ck-content h3::before {
+    content: ""; /* Contenido inicial vacío */
+    color: rgb(59, 130, 246);
+    transition: transform 0.8s ease; /* Transición suave */
+    display: inline-block; /* Para que ocupe espacio en línea */
+}
+
+.ck-content h3:hover::before {
+    content: "## "; /* Mostrar el símbolo # al pasar el mouse */
+    transform: translateX(-5px); /* Desplazamiento suave hacia la izquierda */
+}
+
+.ck-content h4::before {
+    content: ""; /* Contenido inicial vacío */
+    color: rgb(59, 130, 246);
+    transition: transform 0.8s ease; /* Transición suave */
+    display: inline-block; /* Para que ocupe espacio en línea */
+}
+
+.ck-content h4:hover::before {
+    content: "### "; /* Mostrar el símbolo # al pasar el mouse */
+    transform: translateX(-5px); /* Desplazamiento suave hacia la izquierda */
+}
+
+.ck-content h5::before {
+    content: ""; /* Contenido inicial vacío */
+    color: rgb(59, 130, 246);
+    transition: transform 0.8s ease; /* Transición suave */
+    display: inline-block; /* Para que ocupe espacio en línea */
+}
+
+.ck-content h5:hover::before {
+    content: "#### "; /* Mostrar el símbolo # al pasar el mouse */
+    transform: translateX(-5px); /* Desplazamiento suave hacia la izquierda */
+}
+
+
+.ck-content .table {
+    display: table;
+    margin: 10px auto;
+    padding: 0 !important;
+}
+
+.ck-content figure {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ck-content table {
+    border: 1px double #b3b3b3;
+    border-collapse: collapse;
+    border-spacing: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.ck-content th, td {
+    border: 1px double #b3b3b3;
+    padding: 5px;
+ }
+
+.ck-content ul,
+.ck-content ol{
+    list-style-type: initial;
+}
+
+.ck-content ol{
+    list-style-type: decimal;
+}
+

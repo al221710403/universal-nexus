@@ -22312,6 +22312,58 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/plugins/ckeditor/ckeditor_base.css":
+/*!******************************************************!*\
+  !*** ./resources/plugins/ckeditor/ckeditor_base.css ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/plugins/ckeditor/ckeditor_create.css":
+/*!********************************************************!*\
+  !*** ./resources/plugins/ckeditor/ckeditor_create.css ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/plugins/ckeditor/ckeditor_view.css":
+/*!******************************************************!*\
+  !*** ./resources/plugins/ckeditor/ckeditor_view.css ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/plugins/prism/prism.css":
+/*!*******************************************!*\
+  !*** ./resources/plugins/prism/prism.css ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -22652,6 +22704,10 @@ module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\laragon\\\\www\\\\
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
+/******/ 			"plugins/prism/prism": 0,
+/******/ 			"plugins/ckeditor/ckeditor_view": 0,
+/******/ 			"plugins/ckeditor/ckeditor_create": 0,
+/******/ 			"plugins/ckeditor/ckeditor_base": 0,
 /******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
@@ -22702,8 +22758,12 @@ module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\laragon\\\\www\\\\
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/plugins/ckeditor/ckeditor_base.css")))
+/******/ 	__webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/plugins/ckeditor/ckeditor_create.css")))
+/******/ 	__webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/plugins/ckeditor/ckeditor_view.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["plugins/prism/prism","plugins/ckeditor/ckeditor_view","plugins/ckeditor/ckeditor_create","plugins/ckeditor/ckeditor_base","css/app"], () => (__webpack_require__("./resources/plugins/prism/prism.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

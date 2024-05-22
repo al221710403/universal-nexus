@@ -94,7 +94,7 @@
                     @forelse ($all_post as $post)
                     <tr class="hover:bg-gray-50">
                         <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                            <a href="{{ route('publish.posts.show', $post->slug) }}" class=" text-lg font-medium text-gray-700">
+                            <a @if($post->published) href="{{ route('publish.posts.show', $post->slug) }}" @else href="{{ route('publish.posts.preview', $post->id) }}" @endif class=" text-lg font-medium text-gray-700">
                                 {{$post->title ?? 'Title Draft'}}
                             </a>
                         </th>

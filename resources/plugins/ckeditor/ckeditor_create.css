@@ -5,3 +5,9 @@
 .ck-content blockquote>p{
     font-style: normal;
 }
+
+.ck-font-family-dropdown .ck-dropdown__panel {
+    max-height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

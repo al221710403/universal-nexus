@@ -1,18 +1,18 @@
 @push('styles')
-<style>
-    .search-term{
-        text-decoration-line: underline;
-        --tw-text-opacity: 1;
-        color: rgb(59 130 246 / var(--tw-text-opacity));
-        text-underline-offset: 3px;
-    }
+    <style>
+        .search-term{
+            text-decoration-line: underline;
+            --tw-text-opacity: 1;
+            color: rgb(59 130 246 / var(--tw-text-opacity));
+            text-underline-offset: 3px;
+        }
 
-    .search-content:hover .search-term {
-        color: white;
-        font-weight: 600;
-        text-decoration-thickness: 2px;
-    }
-</style>
+        .search-content:hover .search-term {
+            color: white;
+            font-weight: 600;
+            text-decoration-thickness: 2px;
+        }
+    </style>
 @endpush
 
 <div class="container mx-auto mt-2 pb-4">
@@ -25,9 +25,6 @@
                     <i class='bx bx-search'></i>
                 </span>
             </div>
-            {{--  <input type="text" wire:model="search"
-                class="my-auto block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-gray-500 focus:border-gray-500"
-                placeholder="Buscar artículo">  --}}
 
             {{-- Buscador --}}
             <x-post.modal-search wire:model='search_post' :busqueda="$search" :results="$this->results"/>
@@ -155,23 +152,23 @@
         </article>
         @empty
         @if (strlen($search) > 0)
-        <div class="md:col-start-2 md:col-end-3 p-4 mt-4 md:mt-12 bg-white rounded-lg shadow-xl">
-            <div class="py-2 mb-3 text-gray-700 px-3">
-                <p class="text-sm mb-3">No ahí artículos que coinciden con la busqueda <span
-                        class="font-bold">{{$search}}</span>.</p>
-                <img src="{{ asset('img/search_not.svg') }}" alt="not search">
+            <div class="md:col-start-2 md:col-end-3 p-4 mt-4 md:mt-12 bg-white rounded-lg shadow-xl">
+                <div class="py-2 mb-3 text-gray-700 px-3">
+                    <p class="text-sm mb-3">No ahí artículos que coinciden con la busqueda <span
+                            class="font-bold">{{$search}}</span>.</p>
+                    <img src="{{ asset('img/search_not.svg') }}" class="h-64 w-64 mx-auto" alt="not search">
+                </div>
             </div>
-        </div>
         @else
-        <div class="md:col-start-2 md:col-end-3 p-4 mt-4 md:mt-12 bg-white rounded-lg shadow-xl">
-            <div class="py-2 mb-3 text-gray-700 px-3">
-                <p class="text-sm mb-3">No ahí artíclos que coinciden con la busqueda, agregue uno nuevo con
-                    el botón
-                    <span><i class='bx bxs-add-to-queue'></i></span> que se euncuentra en la parte superior.
-                </p>
-                <img src="{{ asset('img/articles.svg') }}" alt="no ahi articulos">
+            <div class="md:col-start-2 md:col-end-3 p-4 mt-4 md:mt-12 bg-white rounded-lg shadow-xl">
+                <div class="py-2 mb-3 text-gray-700 px-3">
+                    <p class="text-sm mb-3">No ahí artíclos que coinciden con la busqueda, agregue uno nuevo con
+                        el botón
+                        <span><i class='bx bxs-add-to-queue'></i></span> que se euncuentra en la parte superior.
+                    </p>
+                    <img src="{{ asset('img/articles.svg') }}" class="h-64 w-64 mx-auto" alt="no ahi articulos">
+                </div>
             </div>
-        </div>
         @endif
         @endforelse
     </div>
@@ -183,4 +180,15 @@
 </div>
 
 @push('scripts')
+    <!-- Escuchar el evento de Livewire y desplazarse al inicio -->
+    <script>
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('pageChanged', function () {
+                window.scrollTo({
+                    top: 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 @endpush

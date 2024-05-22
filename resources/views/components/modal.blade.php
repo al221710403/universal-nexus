@@ -1,4 +1,4 @@
-@props(['id', 'maxWidth','label','close','index'])
+@props(['id', 'maxWidth','label','close','index','keydown'])
 
 @php
 $id = $id ?? md5($attributes->wire('model'));
@@ -6,6 +6,7 @@ $label = $label ?? false;
 $close = $close ?? false;
 $full = $maxWidth != 'full_screen' ? 'px-4 py-10' : '';
 $index = $index ?? 20;
+$keydown = $keydown ?? false;
 
 $maxWidth = [
 'max' => 'w-max', //Width se ajusta al maximo del contenido
@@ -16,10 +17,14 @@ $maxWidth = [
 'full' => 'min-w-full w-full', // 100% de la pantalla
 'full_screen' => 'min-w-full w-full min-h-screen max-h-full', // toda la pantalla
 ][$maxWidth ?? 'md'];
+
+$model = $attributes->wire('model')->value();
 @endphp
 
 
-<div x-cloak x-data="{ show: @entangle($attributes->wire('model')).defer }">
+<div x-cloak x-data="{ show: @entangle($attributes->wire('model')).defer }"
+    @if($keydown != false) x-on:keydown.{{ $keydown }}.window="show = true" @endif
+    >
     <div x-show="show" class="inset-0 h-full w-full fixed overflow-x-hidden overflow-y-auto"
         style="z-index: {{$index}}; background-color: rgba(0, 0, 0, 0.5)" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
@@ -37,7 +42,7 @@ $maxWidth = [
                     <h2 class="text-xl font-medium text-gray-800 ">
                         {{ $title }}
                     </h2>
-                    <button data-action="close" @if($close !=false) wire:click="{{$close}}" @endif @click="show = false"
+                    <button data-action="close" @if($close !=false) wire:click="{{$close}}" @endif @click="show = false" wire:click="$set('{{ $model }}', false)"
                         class="btn-mdl text-2xl text-gray-600 focus:outline-none hover:text-red-600" title="Cerrar">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">

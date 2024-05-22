@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .ck-editor__main {
     word-wrap: break-word;
     background: transparent;
@@ -119,20 +123,74 @@
     line-height: 1.25rem; /* 20px */
 }
 
-
-/* ============================================================== */
-/* ============================================================== */
-
-
-/* .ck-content p>span {
-    display: inline-block !important;
-    float: left !important;
-    padding-right: 0.75rem !important;
-    max-width: 100% !important;
-    min-width: 50% !important;
+.ck-content ul,
+.ck-content ol{
+    --tw-text-opacity: 1;
+    color: rgb(82 82 82 / var(--tw-text-opacity));
+    -webkit-margin-before: 1em;
+            margin-block-start: 1em;
+    -webkit-margin-after: 1em;
+            margin-block-end: 1em;
+    -webkit-margin-start: 0px;
+            margin-inline-start: 0px;
+    -webkit-margin-end: 0px;
+            margin-inline-end: 0px;
+    -webkit-padding-start: 40px !important;
+            padding-inline-start: 40px !important;
+    unicode-bidi: isolate;
 }
 
-.ck-content p>span>img {
-    height: 18rem !important;
-    width: 100% !important;
-} */
+.ck-content ul ul {
+    list-style-type: circle;
+    -webkit-margin-before: 0.3em;
+            margin-block-start: 0.3em;
+    -webkit-margin-after: 0.3em;
+}
+
+.ck-content ol ol {
+    list-style-type: lower-latin;
+    -webkit-margin-before: 0.3em;
+            margin-block-start: 0.3em;
+    -webkit-margin-after: 0.3em;
+}
+
+.ck-content .text-tiny {
+    font-size: 0.7em;
+}
+
+.ck-content .text-small {
+    font-size: 0.85em;
+}
+
+.ck-content .text-big {
+    font-size: 1.4em;
+}
+
+.ck-content .text-huge {
+    font-size: 1.8em;
+}
+
+
+/* Estilos para el desplazamiento hacia arriba */
+.back-to-top {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    --tw-text-opacity: 1;
+    background-color: rgb(37 99 235 / var(--tw-text-opacity));
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+
+.back-to-top.show {
+    display: block;
+}
+

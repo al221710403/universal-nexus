@@ -1,4 +1,15 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/plugins/prism/prism.js": "/plugins/prism/prism.js",
+    "/plugins/prism/prism.css": "/plugins/prism/prism.css",
+    "/plugins/ckeditor/ckeditor_view.css": "/plugins/ckeditor/ckeditor_view.css",
+    "/plugins/ckeditor/ckeditor_create.css": "/plugins/ckeditor/ckeditor_create.css",
+    "/plugins/ckeditor/ckeditor_base.css": "/plugins/ckeditor/ckeditor_base.css",
+    "/css/app.css": "/css/app.css",
+    "/storage/app/public/boxicons.json": "/storage/app/public/boxicons.json",
+    "/storage/app/public/noimg.png": "/storage/app/public/noimg.png",
+    "/storage/app/public/publish/post/image/noimg.png": "/storage/app/public/publish/post/image/noimg.png",
+    "/plugins/tagify/tagify.css": "/plugins/tagify/tagify.css",
+    "/plugins/tagify/tagify.js": "/plugins/tagify/tagify.js",
+    "/plugins/tagify/tagify.polyfills.min.js": "/plugins/tagify/tagify.polyfills.min.js"
 }

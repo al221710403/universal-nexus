@@ -2,143 +2,138 @@
 
 @section('styles')
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Antic+Didone&family=Bebas+Neue&family=Berkshire+Swash&family=Caveat:wght@400..700&family=Cedarville+Cursive&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Comfortaa:wght@300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Italiana&family=La+Belle+Aurore&family=League+Script&family=Lobster&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat+Subrayada:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Georgian:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shadows+Into+Light+Two&display=swap');
     </style>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-    </style>
-    <link rel="stylesheet" href="{{ asset('vendor/prism/prism.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ckeditor_base.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ckeditor_view.css') }}">
-    <style>
-        .ck-content ul,
-        .ck-content ol{
-            --tw-text-opacity: 1;
-            color: rgb(82 82 82 / var(--tw-text-opacity));
-            margin-block-start: 1em;
-            margin-block-end: 1em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
-            padding-inline-start: 40px !important;
-            unicode-bidi: isolate;
-            list-style-type: initial;
-        }
 
-        .ck-content ol{
-            list-style-type: decimal;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('plugins/ckeditor/ckeditor_base.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/ckeditor/ckeditor_view.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/prism/prism.css') }}">
 @endsection
 
 @section('content')
-<div class="container mx-auto py-4 mb-4">
-    <div class="mb-2">
-        <section class="flex justify-between p-4 bg-white rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold text-gray-700"> <span><i class='bx bxs-label'></i></span>
-                {{$dataJson["title"]}}
-            </h2>
-        </section>
-    </div>
+    <div class="container mx-auto py-4 mb-4">
+        <div class="mb-2">
+            <section class="flex justify-between p-4 bg-white rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold text-gray-700"> <span><i class='bx bxs-label'></i></span>
+                    {{$dataJson["title"]}}
+                </h2>
+            </section>
+        </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{--  Seccion del Post  --}}
-        <article class="lg:col-span-2 bg-white rounded-md shadow-lg p-3 relative">
-            {{--  Sección de Tags  --}}
-            @if ($post->tags->count() > 0)
-                <section class="flex flex-wrap mb-2">
-                    @foreach ($post->tags as $tag)
-                    <span class="inline-blog text-xs font-semibold px-2.5 py-0.5 mt-2 mr-2 h-6 bg-blue-100 text-indigo-500 rounded-md">
-                        {{$tag->name}}
+            {{--  Seccion del Post  --}}
+            <article class="lg:col-span-2 bg-white rounded-md shadow-lg p-3 relative">
+                {{--  Sección de Tags  --}}
+                @if ($post->tags->count() > 0)
+                    <section class="flex flex-wrap mb-2">
+                        @foreach ($post->tags as $tag)
+                        <span class="inline-blog text-xs font-semibold px-2.5 py-0.5 mt-2 mr-2 h-6 bg-blue-100 text-indigo-500 rounded-md">
+                            {{$tag->name}}
+                        </span>
+                        @endforeach
+                    </section>
+                    <hr class="mt-1 md:mb-2" />
+                @endif
+
+                {{--  Span que muestra si el post es público o privado esto solo si eres el dueño del post  --}}
+                @if ( Auth::user()->id == $post->author->id )
+                    <span class="absolute z-20 top-0 right-0  bg-blue-500 text-white px-2 py-1">
+                        {{$post->public ? 'Público' : 'Privado'}}
                     </span>
-                    @endforeach
-                </section>
-                <hr class="mt-1 md:mb-2" />
-            @endif
+                @endif
 
-            {{--  Span que muestra si el post es público o privado esto solo si eres el dueño del post  --}}
-            @if ( Auth::user()->id == $post->author->id )
-                <span class="absolute z-20 top-0 right-0  bg-gray-400 text-white px-2 py-1">
-                    {{$post->public ? 'Público' : 'Privado'}}
-                </span>
-            @endif
-
-            {{--  Muestra el titulo dependiendo si tiene imagen o no  --}}
-            @if ($post->featured_image != 'noimg.png')
-                <div class="mb-4 md:mb-0 w-full mx-auto relative h-80 text-base">
-                    <div class="absolute left-0 bottom-0 w-full h-full z-10"
-                        style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.7));"></div>
-                    <img src="{{Storage::url($post->featured_image)}}"
-                        class="absolute left-0 top-0 w-full h-full z-0 object-cover" />
-                    <div class="p-4 absolute bottom-0 left-0 z-20">
-                        <h1 class="text-5xl font-semibold text-gray-100 leading-tight">
-                            {{$post->title}}
-                        </h1>
-                        <div class="flex mt-3">
-                            <img src="{{$post->author->profile_photo_url}}" class="h-10 w-10 rounded-full mr-2 object-cover"
-                                alt="{{$post->author->name}}" />
-                            <div>
-                                <p class="font-semibold text-gray-200 text-sm"> {{$post->author->name}} </p>
-                                <p class="font-semibold text-gray-400 text-xs">
-                                    <time datetime=" {{$post->publish_date}}">
-                                        <i class='bx bxs-calendar'></i>
-                                        {{ Carbon\Carbon::parse($post->publish_date)->isoFormat('D MMMM') }}
-                                    </time>
-                                </p>
+                {{--  Muestra el titulo dependiendo si tiene imagen o no  --}}
+                @if ($post->featured_image != 'noimg.png')
+                    <div class="mb-4 md:mb-0 w-full mx-auto relative h-80 text-base">
+                        <div class="absolute left-0 bottom-0 w-full h-full z-10"
+                            style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.7));"></div>
+                        <img src="{{Storage::url($post->featured_image)}}"
+                            class="absolute left-0 top-0 w-full h-full z-0 object-cover" />
+                        <div class="p-4 absolute bottom-0 left-0 z-20">
+                            <h1 class="text-5xl font-semibold text-gray-100 leading-tight">
+                                {{$post->title}}
+                            </h1>
+                            <div class="flex mt-3">
+                                <img src="{{$post->author->profile_photo_url}}" class="h-10 w-10 rounded-full mr-2 object-cover"
+                                    alt="{{$post->author->name}}" />
+                                <div>
+                                    <p class="font-semibold text-gray-200 text-sm"> {{$post->author->name}} </p>
+                                    <p class="font-semibold text-gray-400 text-xs">
+                                        <time datetime=" {{$post->publish_date}}">
+                                            <i class='bx bxs-calendar'></i>
+                                            {{ Carbon\Carbon::parse($post->publish_date)->isoFormat('D MMMM') }}
+                                        </time>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @else
-                <div class="mb-2 md:mb-0 w-full mx-auto pb-1">
-                    <h1 class="text-5xl my-6 font-semibold text-gray-800 leading-tight text-center w-full inline-block">
-                        {{$post->title}}
-                    </h1>
-                    <hr class="mt-1" />
-                    <ul class="flex justify-between mt-1">
-                        <li class="flex items-center">
-                            <img src="{{$post->author->profile_photo_url}}" class="mr-1 h-6 w-6 rounded-full object-cover"
-                                alt="{{$post->author->name}}" />
-                            <p class="font-semibold text-gray-400 text-xs"> {{$post->author->name}} </p>
-                        </li>
-                        <li class="font-semibold text-gray-400 text-xs flex items-center">
-                            <time datetime=" {{$post->publish_date}}">
-                                <i class='bx bxs-calendar'></i>
-                                {{ Carbon\Carbon::parse($post->publish_date)->isoFormat('D MMMM') }}
-                            </time>
-                        </li>
-                    </ul>
-                </div>
-            @endif
+                @else
+                    <div class="mb-2 md:mb-0 w-full mx-auto pb-1">
+                        <h1 class="text-5xl my-6 font-semibold text-gray-800 leading-tight text-center w-full inline-block">
+                            {{$post->title}}
+                        </h1>
+                        <hr class="mt-1" />
+                        <ul class="flex justify-between mt-1">
+                            <li class="flex items-center">
+                                <img src="{{$post->author->profile_photo_url}}" class="mr-1 h-6 w-6 rounded-full object-cover"
+                                    alt="{{$post->author->name}}" />
+                                <p class="font-semibold text-gray-400 text-xs"> {{$post->author->name}} </p>
+                            </li>
+                            <li class="font-semibold text-gray-400 text-xs flex items-center">
+                                <time datetime=" {{$post->publish_date}}">
+                                    <i class='bx bxs-calendar'></i>
+                                    {{ Carbon\Carbon::parse($post->publish_date)->isoFormat('D MMMM') }}
+                                </time>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
 
-            {{--  Contenido del Post  --}}
-            <div class="ck-editor__main">
-                <div class="ck-content mt-2">
-                    {!!$post->body!!}
+                {{--  Contenido del Post  --}}
+                <div class="ck-editor__main">
+                    <div class="ck-content mt-2">
+                        {!!$post->body!!}
+                    </div>
                 </div>
-            </div>
-        </article>
+                @if (!empty($keywords))
+                    <hr>
+                    <section class="pl-4 mt-1.5">
+                        <header class="text-2xl font-semibold text-gray-700"># Palabras clave</header>
+                        <ul class="w-3/4 px-4 mt-1">
+                            @foreach ($keywords as $word)
+                                <li class="text-gray-500 p-1 text-base border-b flex items-center">
+                                    <span class="mr-1"><i class='bx bxl-slack-old'></i></span>
+                                    <p class="inline-block w-full">{{ $word }}</p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </section>
+                @endif
+            </article>
 
-        {{-- Tabla de contenido --}}
-        <aside class="relative">
-            <section class="bg-white rounded-md shadow-lg py-4 px-5 sticky top-1" id="containerTableOfContents">
-                <h2 class="text-xl font-semibold text-gray-700">Tabla de Contenido</h2>
-                <div id="tableOfContents">
-                </div>
+            {{-- Tabla de contenido --}}
+            <aside class="relative">
+                <section class="bg-white rounded-md shadow-lg py-4 px-5 sticky top-1" id="containerTableOfContents">
+                    <h2 class="text-xl font-semibold text-gray-700">Tabla de Contenido</h2>
+                    <div id="tableOfContents">
+                    </div>
 
-                <p class="text-red-700 text-sm leading-6 mt-2" id="notify">No ahí titulos para generar una tabla de contenidos.</p>
+                    <p class="text-red-700 text-sm leading-6 mt-2" id="notify">No ahí titulos para generar una tabla de contenidos.</p>
 
-            </section>
-        </aside>
+                </section>
+            </aside>
+        </div>
+
+        <div id="back-to-top" class="back-to-top">
+            <span class="text-2xl"><i class='bx bxs-up-arrow-alt'></i></span>
+        </div>
     </div>
-</div>
-
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('vendor/prism/prism.js') }}"></script>
+    <script src="{{ asset('plugins/prism/prism.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const preElements = document.querySelectorAll('pre');
@@ -216,16 +211,24 @@
 
                     const level = parseInt(title.tagName.toLowerCase().replace('h', ''), 10);
                     const listItem = document.createElement('li');
+                    const textItem = document.createElement('p');
                     const link = document.createElement('a');
+
                     listItem.classList.add('py-0.5');
                     link.classList.add('hover:text-blue-600');
                     link.href = `#${title.id || `title-${index + 1}`}`;
+
+                    // Añadir el texto
                     link.textContent = title.textContent;
-                    listItem.appendChild(link);
+
+                    // Añadir el enlace <a> al <p> y luego al <li>
+                    textItem.appendChild(link);
+                    listItem.appendChild(textItem);
+
 
                     // Calcular el padding-left basado en el nivel
                     const paddingLeft = level - 2; // 5px por nivel
-                    link.style.paddingLeft = `${paddingLeft}rem`;
+                    textItem.style.paddingLeft = `${paddingLeft}rem`;
 
 
                     tableOfContents.appendChild(listItem);
@@ -263,5 +266,28 @@
                 }
             }
         });
+    </script>
+
+    {{--  Botón de desplazamiento hacia arriba  --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const backToTopButton = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 200) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            backToTopButton.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
     </script>
 @endsection

@@ -14,4 +14,10 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
     ];
+
+    protected function tokensShouldBeRefreshed($request)
+    {
+        return false;
+    }
+
 }

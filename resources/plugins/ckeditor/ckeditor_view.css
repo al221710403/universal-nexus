@@ -70,3 +70,12 @@
     border: 1px double #b3b3b3;
     padding: 5px;
  }
+
+.ck-content ul,
+.ck-content ol{
+    list-style-type: initial;
+}
+
+.ck-content ol{
+    list-style-type: decimal;
+}

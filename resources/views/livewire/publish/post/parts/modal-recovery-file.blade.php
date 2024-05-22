@@ -7,7 +7,7 @@
         <article class="body-content">
             <p class="mb-1">Se encontró un archivo de recuperación.</p>
             @if ($dataJson)
-                <p>Última fecha de modificación: <span class="font-semibold"> {{$dataJson['craeted_at']}} </span></p>
+                <p>Última fecha de modificación: <span class="font-semibold"> {{$dataJson['created_at']}} </span></p>
             @endif
         </article>
     </x-slot>

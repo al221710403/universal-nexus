@@ -6,7 +6,7 @@
                 <main>
                     <header>
                         <h1 class="text-gray-800  text-2xl lg:text-3xl  font-semibold">Registrate en</h1>
-                        <h2 class="text-blue-700 text-2xl lg:text-4xl font-bold">All in one</h2>
+                        <h2 class="text-blue-700 text-2xl lg:text-4xl font-bold">{{ config('app.name', 'All in one') }}</h2>
                     </header>
 
                     <form method="POST" action="{{ route('register') }}" class="mt-10">
@@ -18,7 +18,7 @@
                             <input placeholder="Nombre del usuario" type="text"
                                 class="pl-10 border-gray-300 focus:border-blue-600 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:text-gray-700 focus:font-semibold rounded-md shadow-sm block mt-1 w-full"
                                 type="text" name="name" value="{{ old('name') }}" required autofocus
-                                autocomplete="name">
+                                autocomplete="off">
                             <span
                                 class="flex items-center absolute inset-y-0 left-0 ml-3 text-xl text-blue-600 leading-5">
                                 <i class='bx bx-user-circle'></i>
@@ -30,7 +30,7 @@
                             <input placeholder="Username" type="text"
                                 class="pl-10 border-gray-300 focus:border-blue-600 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:text-gray-700 focus:font-semibold rounded-md shadow-sm block mt-1 w-full"
                                 type="text" name="username" value="{{ old('username') }}" required autofocus
-                                autocomplete="username">
+                                autocomplete="off">
                             <span
                                 class="flex items-center absolute inset-y-0 left-0 ml-3 text-xl text-blue-600 leading-5">
                                 <i class='bx bx-rename'></i>
@@ -41,7 +41,7 @@
                         <div class="relative mt-4">
                             <input placeholder="Email" type="text"
                                 class="pl-10 border-gray-300 focus:border-blue-600 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:text-gray-700 focus:font-semibold rounded-md shadow-sm block mt-1 w-full"
-                                type="text" name="email" value="{{ old('email') }}" autofocus autocomplete="email">
+                                type="text" name="email" value="{{ old('email') }}" autofocus autocomplete="off">
                             <span
                                 class="flex items-center absolute inset-y-0 left-0 ml-3 text-xl text-blue-600 leading-5">
                                 <i class='bx bx-envelope'></i>
@@ -52,7 +52,7 @@
                         <div class="relative mt-4" x-data="{ show: true }">
                             <input placeholder="Contraseña" :type="show ? 'password' : 'text'"
                                 class="pl-10 border-gray-300 focus:border-blue-600 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:text-gray-700 focus:font-semibold rounded-md shadow-sm block mt-1 w-full"
-                                name="password" required autocomplete="new-password">
+                                name="password" required autocomplete="off">
                             <span
                                 class="flex items-center absolute inset-y-0 left-0 ml-3 text-xl text-blue-600 leading-5">
                                 <i class='bx bxs-lock-alt'></i>
@@ -80,7 +80,7 @@
                         <div class="relative mt-4" x-data="{ show: true }">
                             <input placeholder="Confirmar contraseña" :type="show ? 'password' : 'text'"
                                 class="pl-10 border-gray-300 focus:border-blue-600 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:text-gray-700 focus:font-semibold rounded-md shadow-sm block mt-1 w-full"
-                                name="password_confirmation" required autocomplete="new-password">
+                                name="password_confirmation" required autocomplete="off">
                             <span
                                 class="flex items-center absolute inset-y-0 left-0 ml-3 text-xl text-blue-600 leading-5">
                                 <i class='bx bxs-lock-alt'></i>
@@ -123,7 +123,7 @@
                 </main>
 
                 <p class="text-sm text-gray-700 mt-3 md:mt-0">© 2020 Todos los derechos reservados. <a href="#"
-                        class="text-blue-700 font-semibold">All in one</a> es un producto de milton.</p>
+                        class="text-blue-700 font-semibold">{{ config('app.name', 'All in one') }}</a> es un producto de milton.</p>
             </section>
         </div>
 

@@ -5,6 +5,7 @@
 
     <x-slot name="content">
         <div class="mt-4">
+            {{--  Imagen de portada  --}}
             <div class="relative z-0 mb-6 w-full group">
                 <input wire:model.defer="featured_image" type="file" name="image" id="background_image" accept="image/*"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -26,6 +27,7 @@
                 @error('featured_image_caption') <span class="text-red-500 text-sm">{{ $message}}</span>@enderror
             </div>  --}}
 
+            {{--  Fecha de publucación y si es publico  --}}
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 mb-6 w-full group">
                     <input wire:model.defer="publish_date" type="datetime-local" name="publish_date" id="publish_date"
@@ -44,32 +46,44 @@
                 </div>
             </div>
 
+            {{--  Seccion de tags  --}}
             <div class="mb-6 w-full" wire:ignore>
                 <label for="tags" class="text-sm text-gray-500 block mb-2">Tags del post</label>
                 <input type="text" name="tags"
                     class="capitalize block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer">
             </div>
 
+            {{--  Palabra clave  --}}
             <div class="mb-6 w-full">
                 <label for="tags" class="text-sm text-gray-500 block mb-2">Palabras clave.</label>
-                {{--  question  --}}
-                {{--  <div class="relative">
-                    <span class="top-3 left-0 absolute text-gray-400"><i class='bx bxs-message-add'></i></span>
-
-                    <input wire:model.defer="new_keyword"
-                    class="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder="Nueva palabra clave" autocomplete="off">
-                </div>  --}}
-
-                <form class="relative" wire:submit.prevent="AddKeyword">
+                <form class="relative" wire:submit.prevent="addKeyword">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-1 text-gray-300 z-10">
                         <i class='bx bxs-message-add'></i>
                     </span>
-                    <input type="text" wire:model.defer="new_keyword"
+                    <input type="text" wire:model.defer="new_keyword" maxlength="200" required
                     class="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder="Nueva palabra clave" autocomplete="off">
                     <button class="hidden" type="submit">Save</button>
                 </form>
+
+                @if (!empty($keywords))
+                    <section>
+                        <ul class="mt-4 w-3/4">
+                            @foreach ($keywords as $word)
+                                <li class="text-gray-500 p-1 text-base border-b flex items-center hover:border hover:shadow-lg">
+                                    <span class="mr-1"><i class='bx bxl-slack-old'></i></span>
+                                    <p class="inline-block w-full">{{ $word }}</p>
+                                    <button class="hover:text-red-600" title="Eliminar" wire:click="removeKeyword('{{$word}}')">
+                                        <span>
+                                            <i class='bx bxs-tag-x'></i>
+                                        </span>
+                                    </button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </section>
+                @endif
+
             </div>
         </div>
     </x-slot>
@@ -84,4 +98,4 @@
             Cerrar
         </button>
     </x-slot>
-    </x-modal.modal-lg>
+</x-modal.modal-lg>

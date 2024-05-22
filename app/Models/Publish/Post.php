@@ -8,6 +8,7 @@ use Spatie\Tags\HasTags;
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -44,6 +45,7 @@ class Post extends Model
         'published' => 'boolean',
         'public' => 'boolean',
         'markdown' => 'boolean',
+        'metadata' => 'array',
     ];
 
 
@@ -66,27 +68,22 @@ class Post extends Model
 
     public function getFeaturedImageAttribute($value)
     {
-        if ($value == null) {
-            return 'noimg.png';
-        } else {
-            if (file_exists('storage/' . $value)) {
-                return $value;
-            } else {
-                return 'noimg.png';
-            }
-        }
+        return $value ? (Storage::exists($value) ? $value : 'noimg.png') : 'noimg.png';
     }
 
 
     /**
-     * Scope a query to only include published posts.
+     * Scope para incluir solo publicaciones que sean tanto publicadas
+     * como públicas, y cuya fecha de publicación sea anterior (o actual).
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePublished($query)
     {
-        return $query->where('published', true);
+        return $query->where('published', true)
+                    ->where('public', true)
+                    ->where('publish_date', '<=', now());
     }
 
     /**
@@ -150,11 +147,7 @@ class Post extends Model
 
     public function scopeAuthorSearch($query, $id)
     {
-        if ($id) {
-            return $query->where('author_id', $id);
-        } else {
-            return;
-        }
+        return $id ? $query->where('author_id', $id) : $query;
     }
 
     public function scopeMypost($query)

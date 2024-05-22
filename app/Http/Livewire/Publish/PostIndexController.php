@@ -6,12 +6,9 @@ use App\Models\User;
 use Spatie\Tags\Tag;
 use Livewire\Component;
 use App\Traits\PostTrait;
-use Illuminate\Support\Str;
 use App\Models\Publish\Post;
 use Livewire\WithPagination;
-use App\Models\Publish\Image;
 use TeamTNT\TNTSearch\TNTSearch;
-use Illuminate\Support\Facades\DB;
 
 class PostIndexController extends Component
 {
@@ -28,6 +25,23 @@ class PostIndexController extends Component
         'deleteMyPost' => 'deleteMyPost'
     ];
 
+    // Emitir un evento cuando la paginación cambia
+    public function updatingPage()
+    {
+        $this->emit('pageChanged');
+    }
+
+    public function updated($propertyName)
+    {
+        // Verificar si la variable modificada es $settings
+        if ($propertyName === 'search_post') {
+            if ($this->search_post == false) {
+                $this->search = "";
+            }
+        }
+
+    }
+
     public function mount()
     {
         $this->column = 'publish_date';
@@ -36,7 +50,7 @@ class PostIndexController extends Component
 
         $this->my_column = 'publish_date';
         $this->my_order = 'desc';
-        $this->my_pagination = 10;
+        $this->my_pagination = 4;
         $this->status = 'all';
     }
 
@@ -80,7 +94,6 @@ class PostIndexController extends Component
         return $posts->map(function($post) use ($se, $tnt) {
             $post->title = $tnt->highlight($post->title, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
             $post->body = $tnt->highlight($post->body, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
-            $post->metadata = $tnt->highlight($post->metadata, $se, 'span',['tagOptions' => ['class' => 'search-term']]);
             return $post; // Asegúrate de devolver el objeto $post después de aplicar la transformación
         });
     }

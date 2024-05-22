@@ -1,4 +1,4 @@
-@props(['id', 'maxWidth'])
+@props(['id', 'maxWidth','keydown'])
 
 @php
 $id = $id ?? md5($attributes->wire('model'));
@@ -10,6 +10,9 @@ $maxWidth = [
     'xl' => 'sm:max-w-xl',
     '2xl' => 'sm:max-w-2xl',
 ][$maxWidth ?? '2xl'];
+$keydown = $keydown ?? false;
+
+$model = $attributes->wire('model')->value();
 @endphp
 
 <div
@@ -29,6 +32,10 @@ $maxWidth = [
         prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
         nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
         prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
+        closeModal() {
+            this.show = false;
+            $wire.set('{{ $model }}', false);
+        },
     }"
     x-init="$watch('show', value => {
         if (value) {
@@ -38,9 +45,10 @@ $maxWidth = [
             document.body.classList.remove('overflow-y-hidden');
         }
     })"
-    x-on:close.stop="show = false"
-    x-on:keydown.escape.window="show = false"
-    x-on:keydown.Ctrl.B.window="show = true"
+    x-on:close.stop="closeModal()"
+    x-on:keydown.escape.window="closeModal()"
+    {{--  x-on:keydown.Ctrl.B.window="show = true"  --}}
+    @if($keydown != false) x-on:keydown.{{ $keydown }}.window="show = true" @endif
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
@@ -48,7 +56,7 @@ $maxWidth = [
     class="jetstream-modal fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
     style="display: none;"
 >
-    <div x-show="show" class="fixed inset-0 transform transition-all" x-on:click="show = false" x-transition:enter="ease-out duration-300"
+    <div x-show="show" class="fixed inset-0 transform transition-all" x-on:click="closeModal()" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                     x-transition:leave="ease-in duration-200"
